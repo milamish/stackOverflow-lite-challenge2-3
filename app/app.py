@@ -31,6 +31,29 @@ class Login(Resource):
             return jsonify({"message": "check your username"})
 api.add_resource(Login,'/api/v1/auth/login')
 
+class GetQuestions(Resource):
+    def get(self):
+    	try:
+    		if queries is None:
+    			return jsonify({"message":"no questions available"})
+    		else:
+    			return jsonify(queries)
+    	except:
+    		return jsonify({"message":"unable to fetch questions"})
+api.add_resource(GetQuestions, '/stackoverflowlite.com/api/v1/question')
+
+class getOneQuestion(Resource):
+	def get(self, ID):
+		try:
+			if ID in query is None:
+				return jsonify({"message":"question cannot be found"})
+			else:
+				return jsonify(query[ID-1])
+		except:
+			return jsonify({"message":"question ID does not exist"})
+			
+api.add_resource(getOneQuestion, '/stackoverflowlite.com/api/v1/question/<int:ID>')
+
 
 if __name__=="__main__":
 	app.run(debug=True)
