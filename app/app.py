@@ -53,6 +53,22 @@ class GetQuestions(Resource):
     		
 api.add_resource(GetQuestions, '/stackoverflowlite.com/api/v1/question')
 
+class Answer(Resource):
+	def post(self,ID):
+		post_answer= request.get_json()['post_answer']
+		try:
+			if ID in query:
+				if ID!=query[question]['ID']:
+					return jsonify({"message":"question does not exist"})
+				else:
+					return jsonify({"message":"unable to post answer"}), 500
+			else:
+				answer.append({"post_answer":post_answer, "query":query[ID-1]})
+				return jsonify({"query":query[ID-1],"post_answer":post_answer})
+		except:
+			return jsonify({"message":"question ID does not exist"})
+api.add_resource(Answer,'/stackoverflowlite.com/api/v1/question/<int:ID>/answer')
+
 
 if __name__=="__main__":
 	app.run(debug=True)
