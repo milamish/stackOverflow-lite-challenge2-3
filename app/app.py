@@ -31,6 +31,18 @@ class Login(Resource):
             return jsonify({"message": "check your username"})
 api.add_resource(Login,'/api/v1/auth/login')
 
+class UpdateAnswer(Resource):
+	def put(self, ID):
+		update_answer = request.get_json()['update_answer']
+		try:
+			if ID in answer is None:
+				return jsonify({"message":"answer not avaiable"})	
+			else:
+				answer.append({"update_answer":update_answer, "answer":answer[ID-1]})
+				return jsonify({"update_answer":update_answer, "answer":answer[ID-1]})
+		except:
+				return jsonify({"message":"Answer ID does not exist"})
+api.add_resource(UpdateAnswer, '/stackoverflowlite.com/api/v1/answer/<int:ID>')
 
 if __name__=="__main__":
 	app.run(debug=True)
