@@ -31,6 +31,17 @@ class Login(Resource):
             return jsonify({"message": "check your username"})
 api.add_resource(Login,'/api/v1/auth/login')
 
+class DeleteQuestion(Resource):
+	def delete(self, ID):
+		try:
+			if ID in query is None:
+				return jsonify({"message":"question not available"})
+			else:
+				del query[ID-1]
+				return jsonify({"message":"question succesfuly deleted"})
+		except:
+			return jsonify({"message":"question ID does not exist"})
+api.add_resource(DeleteQuestion, '/stackoverflowlite.com/api/v1/question/<int:ID>')
 
 if __name__=="__main__":
 	app.run(debug=True)
