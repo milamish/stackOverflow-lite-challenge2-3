@@ -40,6 +40,19 @@ class PostQuestion(Resource):
         return jsonify({"question":question})
 api.add_resource(PostQuestion,'/stackoverflowlite.com/api/v1/question')
 
+class GetQuestions(Resource):
+    def get(self):
+    	try:
+    		if queries is None:
+    			return jsonify({"message":"no questions available"})
+    		else:
+    			return jsonify(queries)
+    	except:
+    		return jsonify({"message":"unable to fetch questions"})
+    		
+    		
+api.add_resource(GetQuestions, '/stackoverflowlite.com/api/v1/question')
+
 
 if __name__=="__main__":
 	app.run(debug=True)
