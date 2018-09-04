@@ -43,19 +43,6 @@ class PostQuestion(Resource):
         return jsonify({"question":question})
 api.add_resource(PostQuestion,'/stackoverflowlite.com/api/v1/question')
 
-class GetQuestions(Resource):
-    def get(self):
-    	try:
-    		if queries is None:
-    			return jsonify({"message":"no questions available"})
-    		else:
-    			return jsonify(queries)
-    	except:
-    		return jsonify({"message":"unable to fetch questions"})
-    		
-    		
-api.add_resource(GetQuestions, '/stackoverflowlite.com/api/v1/question')
-
 class Answer(Resource):
 	def post(self,ID):
 		post_answer= request.get_json()['post_answer']
@@ -72,6 +59,7 @@ class Answer(Resource):
 			return jsonify({"message":"question ID does not exist"})
 api.add_resource(Answer,'/stackoverflowlite.com/api/v1/question/<int:ID>/answer')
 
+
 class DeleteQuestion(Resource):
 	def delete(self, ID):
 		try:
@@ -83,6 +71,47 @@ class DeleteQuestion(Resource):
 		except:
 			return jsonify({"message":"question ID does not exist"})
 api.add_resource(DeleteQuestion, '/stackoverflowlite.com/api/v1/question/<int:ID>')
+
+class GetQuestions(Resource):
+	def get(self):
+		try:
+			if queries is None:
+				return jsonify({"message":"no questions available"})
+			else:
+				return jsonify(queries)
+		except:
+			return jsonify({"message":"unable to fetch questions"})
+api.add_resource(GetQuestions, '/stackoverflowlite.com/api/v1/question')
+
+class getOneQuestion(Resource):
+	def get(self, ID):
+		try:
+			if ID in query is None:
+				return jsonify({"message":"question cannot be found"})
+			else:
+				return jsonify(query[ID-1])
+		except:
+			return jsonify({"message":"question ID does not exist"})
+			
+api.add_resource(getOneQuestion, '/stackoverflowlite.com/api/v1/question/<int:ID>')
+
+class getAnswers(Resource):
+	def get(self):
+		return jsonify(answers)
+api.add_resource(getAnswers, '/stackoverflowlite.com/api/v1/answers')
+
+class UpdateAnswer(Resource):
+	def put(self, ID):
+		update_answer = request.get_json()['update_answer']
+		try:
+			if ID in answer is None:
+				return jsonify({"message":"answer not avaiable"})	
+			else:
+				answer.append({"update_answer":update_answer, "answer":answer[ID-1]})
+				return jsonify({"update_answer":update_answer, "answer":answer[ID-1]})
+		except:
+				return jsonify({"message":"Answer ID does not exist"})
+api.add_resource(UpdateAnswer, '/stackoverflowlite.com/api/v1/answer/<int:ID>')
 
 if __name__=="__main__":
 	app.run(debug=True)
