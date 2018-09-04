@@ -44,4 +44,3 @@ api.add_resource(PostQuestion,'/stackoverflowlite.com/api/v1/question')
 if __name__=="__main__":
 	app.run(debug=True)
 
-
