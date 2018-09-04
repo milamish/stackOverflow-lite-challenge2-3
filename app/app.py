@@ -95,6 +95,11 @@ class getOneQuestion(Resource):
 			
 api.add_resource(getOneQuestion, '/stackoverflowlite.com/api/v1/question/<int:ID>')
 
+class getAnswers(Resource):
+	def get(self):
+		return jsonify(answers)
+api.add_resource(getAnswers, '/stackoverflowlite.com/api/v1/answers')
+
 
 if __name__=="__main__":
 	app.run(debug=True)
