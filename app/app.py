@@ -30,3 +30,7 @@ class Login(Resource):
         else:
             return jsonify({"message": "check your username"})
 api.add_resource(Login,'/api/v1/auth/login')
+
+
+if __name__=="__main__":
+	app.run(debug=True)
