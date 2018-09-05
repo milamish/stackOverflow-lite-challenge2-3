@@ -5,3 +5,60 @@
 [![Coverage Status](https://coveralls.io/repos/github/milamish/stackOverflow-lite-challenge2-3/badge.svg?branch=challenge2)](https://coveralls.io/github/milamish/stackOverflow-lite-challenge2-3?branch=challenge2)
 
 # stackOverflow-lite
+is an app that allows users to post questions, answer questions, modify answers and delete their questions
+
+install virtual environment
+````
+
+py -3 -m venv venv (for windows)
+````
+activate virtual environment
+```
+venv\Scripts\activate
+```
+install flask
+```
+pip install flask
+```
+intall requirements.txt
+```
+pip install -r requirements.txt
+```
+run the code
+
+open postman to test on the functionality of the endpoints
+```
+home '/api/v1/'
+```
+```
+signup'/stackoverflowlite.com/api/v1/auth/signup'
+```
+```
+login '/stackoverflowlite.com/api/v1/auth/login'
+```
+```
+post question '/stackoverflowlite.com/api/v1/question'
+```
+```
+fetch one question '/stackoverflowlite.com/api/v1/question/<int:ID>'
+```
+```
+fetch all questions '/stackoverflowlite.com/api/v1/question'
+```
+```
+post answer '/stackoverflowlite.com/api/v1/question/<int:ID>/answer'
+```
+```
+fetch questions with answers '/stackoverflowlite.com/api/v1/answers'
+```
+```
+update answer '/stackoverflowlite.com/api/v1/answer/<int:ID>'
+```
+```
+delete question '/stackoverflowlite.com/api/v1/question/<int:ID>'
+```
+```
+copy the url then post it on postman
+
+check on endpoint functionality by typing the required routes on postman and the methods as well
+```

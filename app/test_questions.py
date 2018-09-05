@@ -72,7 +72,15 @@ class Test_questions(unittest.TestCase):
 		postquestion=app.test_client().post('/stackoverflowlite.com/api/v1/question',data=question_data, headers=header)
 		result= json.loads(postquestion.data.decode())
 		self.assertEqual(result,{'question': 'we are good'})
-		
+	
+	#test for delete function
+	def test_delete_question(self):
+		ID = "1"
+		data = json.dumps({"query":ID})
+		header = {"content-type":"application/json"}
+		delete_question = app.test_client().delete('/stackoverflowlite.com/api/v1/question/<int:ID>',data=data, headers=header)
+		self.assertEqual(delete_question.status_code,404)
+	
 
 
 if __name__ =='__main__':
