@@ -27,7 +27,7 @@ class Test_questions(unittest.TestCase):
 		signedup=app.test_client().post('/stackoverflowlite.com/api/v1/auth/signup',data=sign_data, headers=header)
 		result= json.loads(signedup.data.decode())
 		self.assertEqual(signedup.status_code, 200)
-		self.assertEqual(result,[{'name': 'Mildred'}, {'username': 'sharlyne2454'}])
+		self.assertEqual(result,{'name': 'Mildred', 'username': 'sharlyne2454'})
 		
 	#test password and username match
 	def test_password_username_match(self):
@@ -80,7 +80,21 @@ class Test_questions(unittest.TestCase):
 		header = {"content-type":"application/json"}
 		delete_question = app.test_client().delete('/stackoverflowlite.com/api/v1/question/<int:ID>',data=data, headers=header)
 		self.assertEqual(delete_question.status_code,404)
-	
+
+	#testing for the users data structure
+	def test_users(self):
+		users = {}
+		name = "mildred"
+		username = "milamish"
+		emailaddress = "milamish@live.com"
+		password = "Mimish6"
+		users.update({username:{"name": name, "emailaddress": emailaddress, "password": password}})
+		register=json.dumps({"username":username,"password": password, "name": name, "emailaddress": emailaddress})
+		header={"content-type":"application/json"}
+		res=app.test_client().post( '/stackoverflowlite.com/api/v1/auth/signup',data=register, headers=header )
+		result = json.loads(res.data.decode())
+		self.assertEqual(res.status_code, 200)
+		self.assertEqual(result,{"name": name,"username":username})
 
 
 if __name__ =='__main__':

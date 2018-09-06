@@ -23,7 +23,7 @@ class Signup(Resource):
             return jsonify({"message":"user already exists"}), 409
         else:
             users.update({username:{"name": name,"emailadress": emailaddress,"password": password}})
-            return jsonify({"name": name},{"username":username})
+            return jsonify({"name": name, "username":username})
 api.add_resource(Signup,'/stackoverflowlite.com/api/v1/auth/signup' )
 
 class Login(Resource):
