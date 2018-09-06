@@ -21,23 +21,6 @@ class Test_questions(unittest.TestCase):
 		self.assertEqual(res.status_code, 200)
 		self.assertEqual(result['message'], "check your username")
 
-	#test username conflict
-	def test_username_conflict(self):
-		users={}
-		name = "caro"
-		username = "carolyn"
-		emailaddress = "caro@live.com"
-		password = "Mimish6"
-		message= "user already exists"
-		users.update({"username":username,"name":name,"emailaddress":emailaddress, "password":password})
-		register=json.dumps({"username": username,"name": name,"emailaddress":emailaddress, "password": password})
-		header={"content-type":"application/json"}
-		res=app.test_client().post( '/stackoverflowlite.com/api/v1/auth/signup',data=register, headers=header )
-		result = json.loads(res.data.decode())
-		self.assertEqual(res.status_code, 200)
-		self.assertEqual(message,"user already exists")
-		self.assertEqual(result,{'name': 'caro', 'username': 'carolyn'})
-
 	#test user signup
 	def test_signedup(self):
 		sign_data=json.dumps({"username":"sharlyne2454", "password":"Milamish8", "emailaddress":"shal5@yahoo.com",
@@ -101,7 +84,7 @@ class Test_questions(unittest.TestCase):
 		header={"content-type":"application/json"}
 		answer_update=app.test_client().put('/stackoverflowlite.com/api/v1/answer/<int:ID>',data=data, headers=header)
 		self.assertEqual(answer_update.status_code,404)
-		self.assertEqual(update_answer,"mish")
+		self.assertEqual(update_answer, "mish")
 
 
 	#test to make sure the posted question is the same as the received question
@@ -135,6 +118,8 @@ class Test_questions(unittest.TestCase):
 		result = json.loads(res.data.decode())
 		self.assertEqual(res.status_code, 200)
 		self.assertEqual(result,{"name": name,"username":username})
+		self.assertEqual(result['message'],"you")
+		self.assertEqual(res.status_code, 409)
 
 	#test query list structure
 	def test_query(self):
