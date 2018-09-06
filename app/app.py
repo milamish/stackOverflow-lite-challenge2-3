@@ -13,6 +13,11 @@ answer = []
 answers = {"answer":answer}
 queries = {"query":query}
 
+class Home(Resource):
+	def get(self):
+		return jsonify({"message":"welcome to stackoverflowlite, post or answer questions!"})
+api.add_resource(Home, '/api/v1/')
+
 class Signup(Resource):
     def post(self):
         name = request.get_json()['name']
