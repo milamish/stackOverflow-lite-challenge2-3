@@ -88,6 +88,22 @@ class Test_questions(unittest.TestCase):
 		self.assertEqual(question_answered.status_code,404)
 		self.assertEqual(answer, [{'post_answer': 's', 'question': {'question': 'we are good'}}])
 
+	def test_update_answer(self):
+		answer= []
+		ID= "6"
+		question="we are good"
+		query.append({"question":question})
+		post_answer="hi"
+		answer.append({"post_answer":post_answer, "question":query[0]})
+		update_answer ="mish"
+		answer.append({"update_answer":update_answer, "answer":answer[0]})
+		data=json.dumps({"update_answer":update_answer,"answer":answer[0]})
+		header={"content-type":"application/json"}
+		answer_update=app.test_client().put('/stackoverflowlite.com/api/v1/answer/<int:ID>',data=data, headers=header)
+		self.assertEqual(answer_update.status_code,404)
+		self.assertEqual(update_answer,"mish")
+
+
 	#test to make sure the posted question is the same as the received question
 	def test_question_entry(self):
 		question= "we are good"
