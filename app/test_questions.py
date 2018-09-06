@@ -24,9 +24,9 @@ class Test_questions(unittest.TestCase):
 		sign_data=json.dumps({"username":"sharlyne2454", "password":"Milamish8", "emailaddress":"shal5@yahoo.com",
 			"name":"Mildred"})
 		header={"content-type":"application/json"}
-		signedup=app.test_client().post('/stackoverflowlite.com/api/v1/auth/signup',data=sign_data, headers=header)
-		result= json.loads(signedup.data.decode())
-		self.assertEqual(signedup.status_code, 200)
+		signed_up=app.test_client().post('/stackoverflowlite.com/api/v1/auth/signup',data=sign_data, headers=header)
+		result= json.loads(signed_up.data.decode())
+		self.assertEqual(signed_up.status_code, 200)
 		self.assertEqual(result,{'name': 'Mildred', 'username': 'sharlyne2454'})
 		
 	#test password and username match
@@ -69,8 +69,8 @@ class Test_questions(unittest.TestCase):
 		question= "we are good"
 		question_data=json.dumps({"question":question})
 		header={"content-type":"application/json"}
-		postquestion=app.test_client().post('/stackoverflowlite.com/api/v1/question',data=question_data, headers=header)
-		result= json.loads(postquestion.data.decode())
+		post_question=app.test_client().post('/stackoverflowlite.com/api/v1/question',data=question_data, headers=header)
+		result= json.loads(post_question.data.decode())
 		self.assertEqual(result,{'question': 'we are good'})
 	
 	#test for delete function
@@ -96,6 +96,17 @@ class Test_questions(unittest.TestCase):
 		self.assertEqual(res.status_code, 200)
 		self.assertEqual(result,{"name": name,"username":username})
 
+	#test query list structure
+	def test_query(self):
+		query=[]
+		question = "is it tough?"
+		query.append({"question":question})
+		quest = json.dumps({"question":question})
+		header={"content-type":"application/json"}
+		response = app.test_client().post('/stackoverflowlite.com/api/v1/question',data = quest, headers = header)
+		result = json.loads(response.data.decode())
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(result,{"question": question})
 
 if __name__ =='__main__':
     unittest.main()
