@@ -33,7 +33,7 @@ class TestQuestions(unittest.TestCase):
 		res=app.test_client().post( '/stackoverflowlite.com/api/v1/auth/login',data=user, headers=header )
 		result = json.loads(res.data.decode())
 		self.assertEqual(res.status_code, 500)
-		self.assertEqual(result['message'], "Internal Server Error")
+		self.assertTrue(result['message'], "Internal Server Error")
 
 	#test username conflict
 	def test_username_conflict(self):
@@ -68,10 +68,9 @@ class TestQuestions(unittest.TestCase):
 		
 	#test password and username match
 	def test_password_username_match(self):
-		password = "Milamish8"
-		username = "Milamish"
-		users = {"username":username, "password":password}
-		
+		users = {"username":"mish", "password":"milamish"}
+		username = "carolyn"
+		password = "Mimish6"
 		sign_data=json.dumps({"password":password,"username":username})
 		header={"content-type":"application/json"}
 		match=app.test_client().post('/stackoverflowlite.com/api/v1/auth/login',data=sign_data, headers=header)
@@ -123,7 +122,6 @@ class TestQuestions(unittest.TestCase):
 		self.assertEqual(answer_update.status_code,404)
 		self.assertEqual(update_answer,"mish")
 
-
 	#test to make sure the posted question is the same as the received question
 	def test_question_entry(self):
 		title = "OOP"
@@ -133,6 +131,17 @@ class TestQuestions(unittest.TestCase):
 		post_question=app.test_client().post('/stackoverflowlite.com/api/v1/question',data=question_data, headers=header)
 		result= json.loads(post_question.data.decode())
 		self.assertEqual(result['message'],'question is available')
+
+	def test_get_one_question(self):
+		query=[]
+		title = "codes"
+		question = "is it tough?"
+		query.append({"title":title, "question":question})
+		get_data = json.dumps({"query":query[0]})
+		header={"content-type":"application/json"}
+		question_fetched = app.test_client().get('/stackoverflowlite.com/api/v1/question/<int:ID>',data=get_data, headers=header)
+		self.assertEqual(question_fetched.status_code, 404)
+		
 	
 	#test for delete function
 	def test_delete_question(self):
