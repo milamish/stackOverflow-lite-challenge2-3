@@ -25,11 +25,20 @@ class Signup(Resource):
         emailaddress = request.get_json()['emailaddress']
         password = request.get_json()['password']
         username = request.get_json()['username']
-        if username in users:
-            return jsonify({"message" : "user already exists"}), 409
-        else:
-            users.update({username:{"name":name, "emailaddress":emailaddress, "password":password}})
-            return jsonify({"name":name, "username":username})
+        try:
+            if username in users:
+                if username == users[username]['username']:
+                    return jsonify({"message" : "user already exists"}), 409
+                else:
+                    return jsonify({"message":"check your details"})
+                   
+            else:
+                users.update({username:{"name":name , "emailaddress":emailaddress, "password":password}})
+                return jsonify({"name":name, "username":username})
+        except:
+            return jsonify({"message":"user exists"})
+               
+            
 api.add_resource(Signup , '/stackoverflowlite.com/api/v1/auth/signup')
 
 class Login(Resource):

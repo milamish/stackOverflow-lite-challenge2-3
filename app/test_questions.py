@@ -48,24 +48,13 @@ class TestQuestions(unittest.TestCase):
 		header={"content-type":"application/json"}
 		res=app.test_client().post( '/stackoverflowlite.com/api/v1/auth/signup',data=register, headers=header )
 		result = json.loads(res.data.decode())
+		users.update({"username":username,"name":name,"emailaddress":emailaddress, "password":password})
+		register=json.dumps({"username": username,"name": name,"emailaddress":emailaddress, "password": password})
+		header={"content-type":"application/json"}
+		res=app.test_client().post( '/stackoverflowlite.com/api/v1/auth/signup',data=register, headers=header )
+		result = json.loads(res.data.decode())
 		self.assertEqual(res.status_code, 200)
-		self.assertEqual(message,"user already exists")
-		self.assertEqual(result,{'name': 'caro', 'username': 'carolyn'})
-
-	'''def test_username_conflict(self):
-		sign_data=json.dumps({"username":"sharlyne2454", "password":"Milamish8", "emailaddress":"shal5@yahoo.com",
-			"name":"Mildred"})
-		header={"content-type":"application/json"}
-		signed_up=app.test_client().post('/stackoverflowlite.com/api/v1/auth/signup',data=sign_data, headers=header)
-		result= json.loads(signed_up.data.decode())
-		sign_data=json.dumps({"username":"sharlyne2454", "password":"Milamish8", "emailaddress":"shal5@yahoo.com",
-			"name":"Mildred"})
-		header={"content-type":"application/json"}
-		signed_up=app.test_client().post('/stackoverflowlite.com/api/v1/auth/signup',data=sign_data, headers=header)
-		result= json.loads(sign_data.data.decode())
-		self.assertEqual(signed_up.status_code,409)'''
-		
-
+		self.assertEqual(result['message'],"user exists")
 
 	#test user signup
 	def test_signedup(self):
