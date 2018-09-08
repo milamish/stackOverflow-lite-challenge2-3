@@ -1,3 +1,4 @@
+"""import modules"""
 from flask import Flask
 from flask import jsonify
 from flask import request
@@ -37,9 +38,9 @@ class Signup(Resource):
                     return jsonify({"message" : "check your details"})
             else:
                 USERS.update({username:{"name":name,\
-                    "emailaddress" : emailaddress, "password":password}})
-                return jsonify({"name" : name, "username":username})
-        except TypeError:
+                    "emailaddress" : emailaddress, "password" : password}})
+                return jsonify({"name" : name, "username" : username})
+        except :
             return jsonify({"message" : "unable to register"})
 API.add_resource(Signup, '/stackoverflowlite.com/api/v1/auth/signup')
 
