@@ -184,7 +184,8 @@ class TestQuestions(unittest.TestCase):
 		self.assertEqual(response.status_code, 200)
 		self.assertEqual(result['message'],'question is available')
 
-	def test_fetching_available_answers(self):
+	#test fetching answers
+	def test_get_answers(self):
 		response = self.APP.post("/stackoverflowlite.com/api/v1/question", content_type='application/json', 
 			data=json.dumps(dict(question="are you good?"), ))
 		result = json.loads(response.data.decode())
