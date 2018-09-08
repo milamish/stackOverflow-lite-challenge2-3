@@ -184,21 +184,20 @@ class TestQuestions(unittest.TestCase):
 		self.assertEqual(response.status_code, 200)
 		self.assertEqual(result['message'],'question is available')
 
-	def test_get_all_answers(self):
-		query = []
-		answer = []
-		answers = {"answer" : answer}
-		title = "codes"
-		question = "is it tough?"
-		query.append({"title":title, "question":question})
-		post_answer = "s"
-		answer.append({"post_answer":post_answer, "question":query[0]})
-		post=json.dumps({"post_answer":post_answer,"query":query[0]})
-		header={"content-type":"application/json"}
-		response = APP.test_client().get('/stackoverflowlite.com/api/v1/answers',data=post, headers = header)
+	def test_fetching_available_answers(self):
+		response = self.APP.post("/stackoverflowlite.com/api/v1/question", content_type='application/json', 
+			data=json.dumps(dict(question="are you good?"), ))
 		result = json.loads(response.data.decode())
-		self.assertEqual(response.status_code, 200)
-		self.assertEqual(answers,answers)
+		response2 = self.APP.post("/stackoverflowlite.com/api/v1/question/0/answer", content_type='application/json', 
+			data=json.dumps(dict(post_answer="sure"), ))
+		result1 = json.loads(response2.data.decode())
+		response3 = self.APP.get("/stackoverflowlite.com/api/v1/answers", 
+			content_type='application/json', data=result1)
+		result2 = json.loads(response3.data.decode())
+		self.assertEqual(result['message'], "Internal Server Error")
+		self.assertEqual(result1['message'], "question ID does not exist")
+		self.assertEqual(result2,result2)
+		self.assertEqual(response3.status_code, 200)
 
 
 if __name__ =='__main__':
