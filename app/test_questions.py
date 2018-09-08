@@ -145,16 +145,14 @@ class TestQuestions(unittest.TestCase):
 	
 	#test for delete function
 	def test_delete_question(self):
-		query=[]
-		title = "codes"
-		question = "is it tough?"
-		query.append({"title":title, "question":question})
-		ID = "0,1,2,3"
-		data = json.dumps({"query":query[0]})
-		header = {"content-type":"application/json"}
-		delete_question = APP.test_client().delete('/stackoverflowlite.com/api/v1/question/<int:ID>',data=data, headers=header)
-		self.assertEqual(delete_question.status_code,404)
-		self.assertEqual({"message":"question ID does not exist"},{"message":"question ID does not exist"})
+		response = self.APP.post("/stackoverflowlite.com/api/v1/question", content_type='application/json', 
+			data=json.dumps(dict(question="are you good?"), ))
+		result = json.loads(response.data.decode())
+		response2 = self.APP.delete("/stackoverflowlite.com/api/v1/question/1", content_type='application/json', 
+			data=result)
+		result1 = json.loads(response2.data.decode())
+		self.assertEqual(result['message'], "Internal Server Error")
+		self.assertEqual(result1, result1)
 
 	#testing for the users data structure
 	def test_users(self):
