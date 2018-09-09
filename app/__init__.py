@@ -8,9 +8,9 @@ app.config ['SECRET_KEY'] = 'mish'
 api=Api(app)
 
 from users.views import users
-#from queries.views import queries
+from queries.views import queries
 from views import main
 
 app.register_blueprint(users)
-#app.register_blueprint(queries)
+app.register_blueprint(queries)
 app.register_blueprint(main)
