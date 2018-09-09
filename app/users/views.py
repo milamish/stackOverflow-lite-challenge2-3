@@ -72,3 +72,30 @@ class Register(Resource):
 		return {"fname":fname,"lname":lname, "emailaddress":emailaddress, "username":username}
 		
 api.add_resource(Register,'/api/v1/auth/signup')
+
+#this class allows a user with an account to login
+class Login(Resource):
+	def post(self):
+		username = request.get_json()['username'].strip()
+		password = request.get_json()['password'].strip()
+		
+		if not username:
+			return {"message":"please enter a username"}
+		if not password:
+			return {"message":"please enter a password"}
+		check_username(username)
+		result=cursor.fetchone()
+		if result is None :
+
+			return {"message":"your username is wrong"}
+		else:
+			
+			if check_pwhash(password, result[5]):
+				token=jwt.encode({'username':username,'user_id':result[0],'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60)},app.config['SECRET_KEY'])
+				return {"message":"succesfuly logged in",'token':token.decode ('UTF-8')}
+			else:
+				return {'message':'invalid password or username'}
+					
+		connection.commit()
+		return {"message":"check your login details"}
+api.add_resource(Login, '/api/v1/auth/login')
