@@ -36,3 +36,10 @@ def check_email_address(emailaddress):
 def register_user(fname, lname, username, emailaddress, phash):
 	cursor.execute("INSERT INTO users(fname,lname,emailaddress,password,username) VALUES\
 		('"+fname+"','"+lname+"','"+emailaddress+"','"+str(phash)+"','"+username+"');",((fname,lname,username,phash,emailaddress),))
+
+def check_question(question):
+	cursor.execute("SELECT * FROM  questions WHERE question=%s;",(question,))
+
+def post_question(title, question, user_id):
+	cursor.execute("INSERT INTO questions(title,question,user_id) \
+		VALUES('"+title+"','"+question+"', '"+str(user_id)+"');",((title,question, user_id),))
