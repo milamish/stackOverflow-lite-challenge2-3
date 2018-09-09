@@ -1,0 +1,22 @@
+language: python
+
+python:
+  - '3.4'
+services:
+  - postgresql
+install:
+  - pip install -r requirements.txt
+  - pip install pytest-cov
+  - pip install coveralls
+before_script:
+  - cd app
+script:
+  - pytest
+  - pytest --cov-report term-missing --cov=app
+  - pytest --cov=.
+  
+
+after_success:
+  - coveralls
+
+cache: pip
