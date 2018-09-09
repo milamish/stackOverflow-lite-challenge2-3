@@ -9,7 +9,8 @@ install:
   - pip install pytest-cov
   - pip install coveralls
 before_script:
-  - cd app
+  - cd app/tests
+  - psql -c 'create database questions;' -U postgres
 script:
   - pytest
   - pytest --cov-report term-missing --cov=app
