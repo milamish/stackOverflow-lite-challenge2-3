@@ -36,3 +36,37 @@ def check_email_address(emailaddress):
 def register_user(fname, lname, username, emailaddress, phash):
 	cursor.execute("INSERT INTO users(fname,lname,emailaddress,password,username) VALUES\
 		('"+fname+"','"+lname+"','"+emailaddress+"','"+str(phash)+"','"+username+"');",((fname,lname,username,phash,emailaddress),))
+
+def post_question(title, question, user_id):
+	cursor.execute("INSERT INTO questions(title,question,user_id) \
+		VALUES('"+title+"','"+question+"', '"+str(user_id)+"');",((title,question, user_id),))
+
+def get_question(question_id):
+	cursor.execute("SELECT * FROM questions WHERE questions.question_id='"+str(question_id)+"';",(question_id,))
+
+def post_post_answer(answer, user_id, question_id):
+	cursor.execute("INSERT INTO answers(answer,user_id,question_id) \
+		VALUES('"+answer+"','"+str(user_id)+"','"+str(question_id)+"');",((answer, user_id,question_id),))
+def get_answers(question_id):
+	cursor.execute("SELECT * FROM answers WHERE question_id ='"+str(question_id)+"';",(question_id,))
+	
+def get_all_questions():
+	cursor.execute("SELECT * FROM questions;")
+
+def get_user_id_and_question_id(question_id, user_id):
+	cursor.execute("SELECT * FROM answers WHERE answers.question_id='"+str(question_id)+"'\
+	 and answers.user_id ='"+str(user_id)+"';",((question_id,user_id),))
+	
+def modify_answer(question_id,answer):
+	cursor.execute("update answers SET answer ='"+answer+"' WHERE question_id ='"+str(question_id)+"';",((answer,question_id),))
+
+def delete_question(user_id, question_id):
+	cursor.execute("DELETE FROM questions WHERE questions.question_id= '"+str(question_id)+"'\
+	 and questions.user_id ='"+str((user_id))+"';",((user_id, question_id),))
+
+def get_user_id(question_id,user_id):
+	cursor.execute("SELECT * FROM questions WHERE questions.question_id = '"+str(question_id)+"'\
+	 and questions.user_id='"+str((user_id))+"'", ((user_id,question_id),))
+
+def check_question(question):
+	cursor.execute("SELECT * FROM  questions WHERE question=%s;",(question,))
