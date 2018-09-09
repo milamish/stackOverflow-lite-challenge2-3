@@ -40,7 +40,7 @@ class Signup(Resource):
                 USERS.update({username:{"name":name,\
                     "emailaddress" : emailaddress, "password" : password}})
                 return jsonify({"name" : name, "username" : username})
-        except :
+        except:
             return jsonify({"message" : "unable to register"})
 API.add_resource(Signup, '/stackoverflowlite.com/api/v1/auth/signup')
 
