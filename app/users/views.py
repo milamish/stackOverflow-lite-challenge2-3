@@ -36,43 +36,43 @@ class Register(Resource):
 		phash = pwhash(password)
 
 		if not fname:
-			return {"message" : "you must provide a name"}
+			return {"message": "you must provide a name"}
 		if not username:
-			return {"message" : "you must provide a username"}
+			return {"message": "you must provide a username"}
 		if len(username) < 5 or len(username) > 22:
-			return {"message" : "username must be between 5 and 22 characters"}
+			return {"message": "username must be between 5 and 22 characters"}
 
 		if not password:
-			return{"message" : "you must provide a password"}
+			return{"message": "you must provide a password"}
 			
 		if password != repeatpassword:
-			return {"message" : "password do not match"}
+			return {"message": "password do not match"}
 
 		if len(password) < 9 or len(password) > 20:
-			return {"message" : "password must be between 9 and 20 characters"}
+			return {"message": "password must be between 9 and 20 characters"}
 
 		if not re.match('\d.*[A-Z]|[A-Z].*\d', password):
-			return {"message" : "password must contain a capital letter and a number"}
+			return {"message": "password must contain a capital letter and a number"}
 
 		if not emailaddress:
-			return {"message" : "you must provide an email"}
+			return {"message": "you must provide an email"}
 
 		if not re.match("[^@]+@[^@]+\.[^@]+", emailaddress):
-			return {"message" : "email address not valid"}
+			return {"message": "email address not valid"}
 			
 		try:
 			check_username(username)
 			if cursor.fetchone() is not None:
-				return{"message" : "username taken"}, 409
+				return{"message": "username taken"}, 409
 			check_email_address(emailaddress)
 			if cursor.fetchone() is not None:
-				return {"message" : "emailaddress exists"}
+				return {"message": "emailaddress exists"}
 			else:
 				register_user(fname, lname, username, emailaddress, phash)
 		except:
-			return {"message" : "unable to register!"}, 500
+			return {"message": "unable to register!"}, 500
 		connection.commit()
-		return {"fname":fname,"lname" : lname, "emailaddress" : emailaddress, "username" : username}
+		return {"fname": fname,"lname": lname, "emailaddress": emailaddress, "username": username}
 		
 api.add_resource(Register, '/api/v1/auth/signup')
 
@@ -83,19 +83,19 @@ class Login(Resource):
 		password = request.get_json()['password'].strip()
 		
 		if not username:
-			return {"message" : "please enter a username"}
+			return {"message": "please enter a username"}
 		if not password:
-			return {"message" : "please enter a password"}
+			return {"message": "please enter a password"}
 		check_username(username)
 		result = cursor.fetchone()
-		if result is None :
-			return {"message" : "your username is wrong"}
+		if result is None:
+			return {"message": "your username is wrong"}
 		else:
 			if check_pwhash(password, result[5]):
-				token = jwt.encode({'username':username, 'user_id':result[0], 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=60)}, app.config['SECRET_KEY'])
-				return {"message" : "succesfuly logged in", 'token' : token.decode ('UTF-8')}
+				token = jwt.encode({'username':username, 'user_id': result[0], 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60)}, app.config['SECRET_KEY'])
+				return {"message": "succesfuly logged in", 'token': token.decode ('UTF-8')}
 			else:
-				return {'message' : 'invalid password or username'}			
+				return {'message': 'invalid password or username'}			
 		connection.commit()
-		return {"message":"check your login details"}
+		return {"message": "check your login details"}
 api.add_resource(Login, '/api/v1/auth/login')
