@@ -50,7 +50,6 @@ class PostQuestion(Resource):
 			return{"message": "unable to post a question"}, 500
 		connection.commit()
 		return {"title": title, "question": question, "user_id": user_id}, 200
-api.add_resource(PostQuestion, '/api/v1/questions')
 
 #this class allows users to get a single question using the question ID
 class GetQuestion(Resource):
@@ -73,13 +72,13 @@ class GetQuestion(Resource):
 						question = result[2]
 						question_date = result[3]
 						question_id = result[0]
-						return jsonify({"user_id": user_id, "title": title, "question": question, "question_date": question_date, "question_id": question_id})
+						return jsonify({"user_id": user_id, "title": title, "question": question,\
+						 "question_date": question_date, "question_id": question_id})
 				except:
 					return{"message": "unable to fetch entry"}, 500
 				connection.commit()
 		finally:
 			pass
-api.add_resource(GetQuestion, '/api/v1/question/<int:question_id>')
 
 #this class allows a user to post an answer to a question using the question id then retrieving the question
 class PostAnswer(Resource):
@@ -101,7 +100,6 @@ class PostAnswer(Resource):
 			return{"message": "the question does not exist"}, 500
 		connection.commit()
 		return {"question_id": question_id, "answer": answer, "user_id": user_id}, 200
-api.add_resource(PostAnswer, '/api/v1/questions/<int:question_id>/answers')
 
 #this class allows a user to retrieve all answers to a specific question using the question ID
 class Getanswers(Resource):
@@ -124,7 +122,8 @@ class Getanswers(Resource):
 							answer=row[1]
 							question=row[2]
 							answer_date=row[4]
-							questions.update({answer_id:{"question": question, "answer": answer, "answer_date": answer_date}})
+							questions.update({answer_id:{"question": question, "answer": answer, \
+								"answer_date": answer_date}})
 
 						return jsonify(questions)
 				except:
@@ -132,7 +131,6 @@ class Getanswers(Resource):
 				connection.commit()
 		finally:
 			pass
-api.add_resource(Getanswers, '/api/v1/questions/<int:question_id>')
 
 #this class allows users to view all asked questions
 class AllQuestions(Resource):
@@ -156,7 +154,8 @@ class AllQuestions(Resource):
 							question = row[2]
 							question_date = row[3]
 							user_id = row[4]
-							questions.update({question_id:{"title": title, "question": question, "user_id": user_id, "question_date": question_date}})
+							questions.update({question_id:{"title": title, "question": question, "user_id": user_id,\
+							 "question_date": question_date}})
 
 						return jsonify(questions)
 				except:
@@ -164,7 +163,6 @@ class AllQuestions(Resource):
 				connection.commit()
 		finally:
 			pass
-api.add_resource(AllQuestions, '/api/v1/questions')
 
 #this class allows a user to edit their own answers
 class Modify(Resource):
@@ -181,7 +179,6 @@ class Modify(Resource):
 			return {"message": "entry does not exist"}, 404
 		connection.commit()
 		return{"answer": answer, "question_id": question_id, "answer_id": answer_id}, 201
-api.add_resource(Modify, '/api/v1/questions/<int:question_id>/answers/<int:answer_id>')
 
 #this class allows authors of questions to delete their own questions
 class Remove(Resource):
@@ -201,7 +198,6 @@ class Remove(Resource):
 			return {"message": "unable to delete question"}, 500
 		connection.commit()
 		return {"question": "question succesfully deleted"}
-api.add_resource(Remove, '/api/v1/questions/<int:question_id>')
 
 class SingleUserQuestions(Resource):
 	@tokens
@@ -223,7 +219,8 @@ class SingleUserQuestions(Resource):
 							question = row[2]
 							question_date = row[3]
 							user_id = row[4]
-							questions.update({question_id:{"title": title, "question": question, "user_id": user_id, "question_date": question_date}})
+							questions.update({question_id:{"title": title, "question": question, "user_id": user_id,\
+							 "question_date": question_date}})
 
 						return jsonify(questions)
 				except:
@@ -231,7 +228,6 @@ class SingleUserQuestions(Resource):
 				connection.commit()
 		finally:
 			pass
-api.add_resource(SingleUserQuestions, '/api/v1/allquestions')
 
 class Titles(Resource):
 	@tokens
@@ -253,7 +249,8 @@ class Titles(Resource):
 							question = row[2]
 							question_date = row[3]
 							user_id = row[4]
-							questions.update({question_id:{"title": title, "question": question, "user_id": user_id, "question_date": question_date}})
+							questions.update({question_id:{"title": title, "question": question, "user_id": user_id,\
+							 "question_date": question_date}})
 
 						return jsonify(questions)
 				except:
@@ -261,4 +258,14 @@ class Titles(Resource):
 				connection.commit()
 		finally:
 			pass
+
+api.add_resource(PostQuestion, '/api/v1/questions')
+api.add_resource(GetQuestion, '/api/v1/question/<int:question_id>')
+api.add_resource(PostAnswer, '/api/v1/questions/<int:question_id>/answers')
+api.add_resource(Getanswers, '/api/v1/questions/<int:question_id>')
+api.add_resource(AllQuestions, '/api/v1/questions')
+api.add_resource(Modify, '/api/v1/questions/<int:question_id>/answers/<int:answer_id>')
+api.add_resource(Remove, '/api/v1/questions/<int:question_id>')
+api.add_resource(SingleUserQuestions, '/api/v1/allquestions')
 api.add_resource(Titles, '/api/v1/questions/<string:title>')
+
