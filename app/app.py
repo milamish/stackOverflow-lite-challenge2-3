@@ -11,15 +11,15 @@ API = Api(APP)
 USERS = {}
 QUERY = []
 ANSWER = []
-ANSWERS = {"ANSWER":ANSWER}
-QUERIES = {"QUERY":QUERY}
+ANSWERS = {"ANSWER": ANSWER}
+QUERIES = {"QUERY": QUERY}
 
 
 class Home(Resource):
     """homepage"""
     def get(self):
         """ get homepage"""
-        return jsonify({"message" : "welcome to stackoverflowlite, post or answer questions!"})
+        return jsonify({"message": "welcome to stackoverflowlite, post or answer questions!"})
 API.add_resource(Home, '/api/v1/')
 
 class Signup(Resource):
@@ -33,15 +33,15 @@ class Signup(Resource):
         try:
             if username in USERS:
                 if username == USERS[username]['username']:
-                    return jsonify({"message" : "user already exists"}), 409
+                    return jsonify({"message": "user already exists"}), 409
                 else:
-                    return jsonify({"message" : "check your details"})
+                    return jsonify({"message": "check your details"})
             else:
-                USERS.update({username:{"name":name,\
-                    "emailaddress":emailaddress, "password":password}})
-                return jsonify({"name":name, "username":username})
+                USERS.update({username: {"name": name,\
+                    "emailaddress": emailaddress, "password": password}})
+                return jsonify({"name": name, "username": username})
         except:
-            return jsonify({"message" : "unable to register"})
+            return jsonify({"message": "unable to register"})
 API.add_resource(Signup, '/stackoverflowlite.com/api/v1/auth/signup')
 
 class Login(Resource):
@@ -52,11 +52,11 @@ class Login(Resource):
         password = request.get_json()["password"]
         if username in USERS:
             if password == USERS[username]["password"]:
-                return jsonify({"message" : "succesfuly logged in"})
+                return jsonify({"message": "succesfuly logged in"})
             else:
-                return jsonify({"message" : "your password is wrong"}), 400
+                return jsonify({"message": "your password is wrong"}), 400
         else:
-            return jsonify({"message" : "check your username"}), 400
+            return jsonify({"message": "check your username"}), 400
 API.add_resource(Login, '/stackoverflowlite.com/api/v1/auth/login')
 
 class PostQuestion(Resource):
@@ -66,10 +66,10 @@ class PostQuestion(Resource):
         title = request.get_json()['title']
         question = request.get_json()['question']
         for question in QUERY:
-            return jsonify({"message" : "question is available"})
+            return jsonify({"message": "question is available"})
         else:
-            QUERY.append({"title":title, "question":question})
-            return jsonify({"title":title, "question":question})
+            QUERY.append({"title": title, "question": question})
+            return jsonify({"title": title, "question": question})
 API.add_resource(PostQuestion, '/stackoverflowlite.com/api/v1/question')
 
 class Answer(Resource):
@@ -80,14 +80,14 @@ class Answer(Resource):
         try:
             if ID in QUERY:
                 if ID != QUERY[QUERY[ID-1]]['ID']:
-                    return jsonify({"message" : "question does not exist"}), 404
+                    return jsonify({"message": "question does not exist"}), 404
                 else:
-                    return jsonify({"message" : "unable to post answer"}), 500
+                    return jsonify({"message": "unable to post answer"}), 500
             else:
-                ANSWER.append({"post_answer":post_answer, "query":QUERY[ID-1]})
-                return jsonify({"query":QUERY[ID-1], "post_answer":post_answer})
+                ANSWER.append({"post_answer": post_answer, "query": QUERY[ID-1]})
+                return jsonify({"query": QUERY[ID-1], "post_answer": post_answer})
         except:
-            return jsonify({"message" : "question ID does not exist"})
+            return jsonify({"message": "question ID does not exist"})
 API.add_resource(Answer, '/stackoverflowlite.com/api/v1/question/<int:ID>/answer')
 
 
@@ -97,12 +97,12 @@ class DeleteQuestion(Resource):
         """detete a question using the question ID"""
         try:
             if ID in QUERY is None:
-                return jsonify({"message" :"question not available"}), 404
+                return jsonify({"message": "question not available"}), 404
             else:
                 del QUERY[ID-1]
-                return jsonify({"message" : "question succesfuly deleted"})
+                return jsonify({"message": "question succesfuly deleted"})
         except TypeError:
-            return jsonify({"message" : "question ID does not exist"}), 404
+            return jsonify({"message": "question ID does not exist"}), 404
 API.add_resource(DeleteQuestion, '/stackoverflowlite.com/api/v1/question/<int:ID>')
 
 class GetQuestions(Resource):
@@ -111,11 +111,11 @@ class GetQuestions(Resource):
         """get all questions"""
         try:
             if QUERIES is None:
-                return jsonify({"message" : "no questions available"})
+                return jsonify({"message": "no questions available"})
             else:
                 return jsonify(QUERIES)
         except TypeError:
-            return jsonify({"message" : "unable to fetch questions"}), 500
+            return jsonify({"message": "unable to fetch questions"}), 500
 API.add_resource(GetQuestions, '/stackoverflowlite.com/api/v1/question')
 
 class GetOneQuestion(Resource):
@@ -124,11 +124,11 @@ class GetOneQuestion(Resource):
         """get one question using the question ID"""
         try:
             if ID in QUERY is None:
-                return jsonify({"message" : "question cannot be found"})
+                return jsonify({"message": "question cannot be found"})
             else:
                 return jsonify(QUERY[ID-1])
         except TypeError:
-            return jsonify({"message" : "question ID does not exist"}), 404
+            return jsonify({"message": "question ID does not exist"}), 404
 API.add_resource(GetOneQuestion, '/stackoverflowlite.com/api/v1/question/<int:ID>')
 
 class GetAnswers(Resource):
@@ -145,12 +145,12 @@ class UpdateAnswer(Resource):
         update_answer = request.get_json()['update_answer']
         try:
             if ID in ANSWER is None:
-                return jsonify({"message" : "answer not available"}), 404
+                return jsonify({"message": "answer not available"}), 404
             else:
-                ANSWER.append({"update_answer":update_answer, "answer":ANSWER[ID-1]})
-                return jsonify({"update_answer":update_answer, "answer":ANSWER[ID-1]})
+                ANSWER.append({"update_answer": update_answer, "answer": ANSWER[ID-1]})
+                return jsonify({"update_answer": update_answer, "answer": ANSWER[ID-1]})
         except TypeError:
-            return jsonify({"message" : "Answer ID does not exist"}), 404
+            return jsonify({"message": "Answer ID does not exist"}), 404
 API.add_resource(UpdateAnswer, '/stackoverflowlite.com/api/v1/answer/<int:ID>')
 
 if __name__ == "__main__":
