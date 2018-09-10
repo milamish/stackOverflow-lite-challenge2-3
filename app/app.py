@@ -9,10 +9,10 @@ APP = Flask(__name__)
 API = Api(APP)
 
 USERS = {}
-query = []
-answer = []
-ANSWERS = {"answer" : answer}
-QUERIES = {"QUERY" : query}
+QUERY = []
+ANSWER = []
+ANSWERS = {"ANSWER" : ANSWER}
+QUERIES = {"QUERY" : ANSWER}
 
 
 class Home(Resource):
@@ -65,10 +65,10 @@ class PostQuestion(Resource):
         """post a question"""
         title = request.get_json()['title']
         question = request.get_json()['question']
-        for question in query:
+        for question in QUERY:
             return jsonify({"message" : "question is available"})
         else:
-            query.append({"title" : title, "question" : question})
+            QUERY.append({"title" : title, "question" : question})
             return jsonify({"title" : title, "question" : question})
 API.add_resource(PostQuestion, '/stackoverflowlite.com/api/v1/question')
 
@@ -78,14 +78,14 @@ class Answer(Resource):
         """post an answer to a qestion"""
         post_answer = request.get_json()['post_answer']
         try:
-            if ID in query:
-                if ID != query[query[ID-1]]['ID']:
+            if ID in QUERY:
+                if ID != QUERY[QUERY[ID-1]]['ID']:
                     return jsonify({"message" : "question does not exist"}), 404
                 else:
                     return jsonify({"message" : "unable to post answer"}), 500
             else:
-                answer.append({"post_answer" : post_answer, "query" : query[ID-1]})
-                return jsonify({"query" : query[ID-1], "post_answer":post_answer})
+                ANSWER.append({"post_answer" : post_answer, "query" : QUERY[ID-1]})
+                return jsonify({"query" : QUERY[ID-1], "post_answer":post_answer})
         except:
             return jsonify({"message" : "question ID does not exist"})
 API.add_resource(Answer, '/stackoverflowlite.com/api/v1/question/<int:ID>/answer')
@@ -96,10 +96,10 @@ class DeleteQuestion(Resource):
     def delete(self, ID):
         """detete a question using the question ID"""
         try:
-            if ID in query is None:
+            if ID in QUERY is None:
                 return jsonify({"message" :"question not available"}), 404
             else:
-                del query[ID-1]
+                del QUERY[ID-1]
                 return jsonify({"message" : "question succesfuly deleted"})
         except TypeError:
             return jsonify({"message" : "question ID does not exist"}), 404
@@ -123,10 +123,10 @@ class GetOneQuestion(Resource):
     def get(self, ID):
         """get one question using the question ID"""
         try:
-            if ID in query is None:
+            if ID in QUERY is None:
                 return jsonify({"message" : "question cannot be found"})
             else:
-                return jsonify(query[ID-1])
+                return jsonify(QUERY[ID-1])
         except TypeError:
             return jsonify({"message" : "question ID does not exist"}), 404
 API.add_resource(GetOneQuestion, '/stackoverflowlite.com/api/v1/question/<int:ID>')
@@ -144,11 +144,11 @@ class UpdateAnswer(Resource):
         """update a n answer to a question using the answer ID"""
         update_answer = request.get_json()['update_answer']
         try:
-            if ID in answer is None:
+            if ID in ANSWER is None:
                 return jsonify({"message" : "answer not available"}), 404
             else:
-                answer.append({"update_answer" : update_answer, "answer" : answer[ID-1]})
-                return jsonify({"update_answer" : update_answer, "answer" : answer[ID-1]})
+                ANSWER.append({"update_answer" : update_answer, "answer" : ANSWER[ID-1]})
+                return jsonify({"update_answer" : update_answer, "answer" : ANSWER[ID-1]})
         except TypeError:
             return jsonify({"message" : "Answer ID does not exist"}), 404
 API.add_resource(UpdateAnswer, '/stackoverflowlite.com/api/v1/answer/<int:ID>')
