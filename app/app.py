@@ -11,8 +11,8 @@ API = Api(APP)
 USERS = {}
 QUERY = []
 ANSWER = []
-ANSWERS = {"ANSWER" : ANSWER}
-QUERIES = {"QUERY" : QUERY}
+ANSWERS = {"ANSWER":ANSWER}
+QUERIES = {"QUERY":QUERY}
 
 
 class Home(Resource):
