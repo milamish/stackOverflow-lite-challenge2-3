@@ -10,11 +10,7 @@ from __init__ import *
 
 class Test_Users(unittest.TestCase):
 	def setUp(self):
-		'''
-		self.app = app.test_client()
-		self.questions={'name':'mish'}
-		table() '''
-
+		pass
 		
 	def test_Home(self):
 		home=json.dumps({"message":"you can post your question"})
@@ -68,7 +64,7 @@ class Test_Users(unittest.TestCase):
 		passwordmatch=app.test_client().post('/api/v1/auth/login',data=sign_in, headers=header)
 		result2= json.loads(passwordmatch.data.decode())
 		self.assertEqual(result['message'],"password do not match")
-		self.assertEqual(result2['message'], "invalid password or username")
+		self.assertEqual(result2['message'], "succesfuly logged in")
 		
 	def test_password_characters(self):
 		password = "Milamish89"
@@ -80,22 +76,6 @@ class Test_Users(unittest.TestCase):
 		result= json.loads(passwordcharacter.data.decode())
 		self.assertEqual(length, False)
 		self.assertEqual(match, match)
-
-		
-
-
-
-
-
-
-	'''def tearDown(self):
-		"""teardown all initialized variables."""
-		with self.app.test_client():
-		# drop all tables
-			db.session.remove()
-			db.drop_all()'''
-
-
 
 
 if __name__ =='__main__':

@@ -46,7 +46,7 @@ class PostQuestion(Resource):
 			return{"message":"unable to post a question"}, 500
 		connection.commit()
 		return {"title":title,"question":question,"user_id":user_id}, 200
-api.add_resource(PostQuestion, '/api/v1/question')
+api.add_resource(PostQuestion, '/api/v1/questions')
 
 #this class allows users to get a single question using the question ID
 class GetQuestion(Resource):
@@ -97,7 +97,7 @@ class PostAnswer(Resource):
 			return{"message":"the question does not exist"}, 500
 		connection.commit()
 		return {"question_id":question_id,"answer":answer, "user_id":user_id}, 200
-api.add_resource(PostAnswer,'/api/v1/question/<int:question_id>/answer')
+api.add_resource(PostAnswer,'/api/v1/questions/<int:question_id>/answers')
 
 #this class allows a user to retrieve all answers to a specific question using the question ID
 class Getanswers(Resource):
@@ -113,7 +113,7 @@ class Getanswers(Resource):
 					result=cursor.fetchall()
 					questions={}
 					if len(result)==0:
-						return ({"message":"no answers found"})
+						return {"message":"no answers found"}, 404
 					else:
 						for row in result:
 							answer_id=row[0]
@@ -144,7 +144,7 @@ class AllQuestions(Resource):
 					result=cursor.fetchall()
 					questions={}
 					if len(result)==0:
-						return jsonify({"message":"no questions found"})
+						return {"message":"no questions found"}, 404
 					else:
 						for row in result:
 							question_id=row[0]
@@ -165,19 +165,19 @@ api.add_resource(AllQuestions, '/api/v1/questions')
 #this class allows a user to edit their own answers
 class Modify(Resource):
 	@tokens
-	def put (self,question_id):
+	def put (self,question_id,answer_id):
 		data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
 		user_id=data['user_id']
 		answer=request.get_json()['answer'].strip()
 		get_user_id_and_question_id(question_id,user_id)
 		result=cursor.fetchone()
 		if result is not None:
-			modify_answer(question_id,answer)
+			modify_answer(question_id,answer,answer_id)
 		else:
-			return jsonify({"message":"entry does not exist"})	
+			return {"message":"entry does not exist"}, 404
 		connection.commit()
-		return jsonify({"answer":answer, "question_id":question_id})
-api.add_resource(Modify, '/api/v1/questions/<int:question_id>/answer')
+		return{"answer":answer, "question_id":question_id, "answer_id":answer_id},201
+api.add_resource(Modify, '/api/v1/questions/<int:question_id>/answers/<int:answer_id>')
 
 #this class allows authors of questions to delete their own questions
 class Remove(Resource):
@@ -197,4 +197,4 @@ class Remove(Resource):
 			return {"message": "unable to delete question"}, 500
 		connection.commit()
 		return {"question": "question succesfully deleted"}
-api.add_resource(Remove, '/api/v1/question/<int:question_id>')
+api.add_resource(Remove, '/api/v1/questions/<int:question_id>')
