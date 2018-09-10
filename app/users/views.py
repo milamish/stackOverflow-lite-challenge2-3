@@ -74,7 +74,6 @@ class Register(Resource):
 		connection.commit()
 		return {"fname": fname,"lname": lname, "emailaddress": emailaddress, "username": username}
 		
-api.add_resource(Register, '/api/v1/auth/signup')
 
 #this class allows a user with an account to login
 class Login(Resource):
@@ -98,4 +97,7 @@ class Login(Resource):
 				return {'message': 'invalid password or username'}, 400			
 		connection.commit()
 		return {"message": "check your login details"}, 400
+
+
+api.add_resource(Register, '/api/v1/auth/signup')
 api.add_resource(Login, '/api/v1/auth/login')
