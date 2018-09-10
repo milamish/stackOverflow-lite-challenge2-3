@@ -98,3 +98,34 @@ class PostAnswer(Resource):
 		connection.commit()
 		return {"question_id":question_id,"answer":answer, "user_id":user_id}, 200
 api.add_resource(PostAnswer,'/api/v1/question/<int:question_id>/answer')
+
+#this class allows a user to retrieve all answers to a specific question using the question ID
+class Getanswers(Resource):
+	@tokens
+	def get(self,question_id):
+		data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
+		user_id=data['user_id']
+		
+		try:
+				get_answers(question_id)
+				try:
+					get_answers(question_id)
+					result=cursor.fetchall()
+					questions={}
+					if len(result)==0:
+						return ({"message":"no answers found"})
+					else:
+						for row in result:
+							answer_id=row[0]
+							answer=row[1]
+							question=row[2]
+							answer_date=row[4]
+							questions.update({answer_id:{"question":question, "answer":answer, "answer_date":answer_date}})
+
+						return jsonify(questions)
+				except:
+					return ({"message":"entry not found"}), 500
+				connection.commit()
+		finally:
+			pass
+api.add_resource(Getanswers, '/api/v1/questions/<int:question_id>')
