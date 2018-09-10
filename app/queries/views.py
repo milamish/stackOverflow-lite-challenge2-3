@@ -129,3 +129,35 @@ class Getanswers(Resource):
 		finally:
 			pass
 api.add_resource(Getanswers, '/api/v1/questions/<int:question_id>')
+
+#this class allows users to view all asked questions
+class AllQuestions(Resource):
+	@tokens
+	def get(self):
+		data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
+		user_id=data['user_id']
+
+		try:
+				get_all_questions()
+				try:
+					get_all_questions()
+					result=cursor.fetchall()
+					questions={}
+					if len(result)==0:
+						return jsonify({"message":"no questions found"})
+					else:
+						for row in result:
+							question_id=row[0]
+							title = row[1]
+							question=row[2]
+							question_date=row[3]
+							user_id=row[4]
+							questions.update({question_id:{"title":title, "question":question, "user_id":user_id, "question_date":question_date}})
+
+						return jsonify(questions)
+				except:
+					return jsonify({"message":"not found"}), 500
+				connection.commit()
+		finally:
+			pass
+api.add_resource(AllQuestions, '/api/v1/questions')
