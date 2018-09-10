@@ -38,8 +38,8 @@ class Signup(Resource):
                     return jsonify({"message" : "check your details"})
             else:
                 USERS.update({username:{"name":name,\
-                    "emailaddress" : emailaddress, "password" : password}})
-                return jsonify({"name" : name, "username" : username})
+                    "emailaddress":emailaddress, "password":password}})
+                return jsonify({"name":name, "username":username})
         except:
             return jsonify({"message" : "unable to register"})
 API.add_resource(Signup, '/stackoverflowlite.com/api/v1/auth/signup')
@@ -68,8 +68,8 @@ class PostQuestion(Resource):
         for question in QUERY:
             return jsonify({"message" : "question is available"})
         else:
-            QUERY.append({"title" : title, "question" : question})
-            return jsonify({"title" : title, "question" : question})
+            QUERY.append({"title":title, "question":question})
+            return jsonify({"title":title, "question":question})
 API.add_resource(PostQuestion, '/stackoverflowlite.com/api/v1/question')
 
 class Answer(Resource):
@@ -84,8 +84,8 @@ class Answer(Resource):
                 else:
                     return jsonify({"message" : "unable to post answer"}), 500
             else:
-                ANSWER.append({"post_answer" : post_answer, "query" : QUERY[ID-1]})
-                return jsonify({"query" : QUERY[ID-1], "post_answer":post_answer})
+                ANSWER.append({"post_answer":post_answer, "query":QUERY[ID-1]})
+                return jsonify({"query":QUERY[ID-1], "post_answer":post_answer})
         except:
             return jsonify({"message" : "question ID does not exist"})
 API.add_resource(Answer, '/stackoverflowlite.com/api/v1/question/<int:ID>/answer')
@@ -147,8 +147,8 @@ class UpdateAnswer(Resource):
             if ID in ANSWER is None:
                 return jsonify({"message" : "answer not available"}), 404
             else:
-                ANSWER.append({"update_answer" : update_answer, "answer" : ANSWER[ID-1]})
-                return jsonify({"update_answer" : update_answer, "answer" : ANSWER[ID-1]})
+                ANSWER.append({"update_answer":update_answer, "answer":ANSWER[ID-1]})
+                return jsonify({"update_answer":update_answer, "answer":ANSWER[ID-1]})
         except TypeError:
             return jsonify({"message" : "Answer ID does not exist"}), 404
 API.add_resource(UpdateAnswer, '/stackoverflowlite.com/api/v1/answer/<int:ID>')
