@@ -12,7 +12,7 @@ USERS = {}
 QUERY = []
 ANSWER = []
 ANSWERS = {"ANSWER" : ANSWER}
-QUERIES = {"QUERY" : ANSWER}
+QUERIES = {"QUERY" : QUERY}
 
 
 class Home(Resource):
