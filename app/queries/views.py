@@ -161,3 +161,20 @@ class AllQuestions(Resource):
 		finally:
 			pass
 api.add_resource(AllQuestions, '/api/v1/questions')
+
+#this class allows a user to edit their own answers
+class Modify(Resource):
+	@tokens
+	def put (self,question_id):
+		data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
+		user_id=data['user_id']
+		answer=request.get_json()['answer'].strip()
+		get_user_id_and_question_id(question_id,user_id)
+		result=cursor.fetchone()
+		if result is not None:
+			modify_answer(question_id,answer)
+		else:
+			return jsonify({"message":"entry does not exist"})	
+		connection.commit()
+		return jsonify({"answer":answer, "question_id":question_id})
+api.add_resource(Modify, '/api/v1/questions/<int:question_id>/answer')
