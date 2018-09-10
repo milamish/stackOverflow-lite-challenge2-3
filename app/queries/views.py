@@ -202,3 +202,63 @@ class Remove(Resource):
 		connection.commit()
 		return {"question": "question succesfully deleted"}
 api.add_resource(Remove, '/api/v1/questions/<int:question_id>')
+
+class SingleUserQuestions(Resource):
+	@tokens
+	def get(self):
+		data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
+		user_id=data['user_id']
+		try:
+				get_all_questions_by_a_user(user_id)
+				try:
+					get_all_questions_by_a_user(user_id)
+					result = cursor.fetchall()
+					questions = {}
+					if len(result) == 0:
+						return {"message": "no questions found"}, 404
+					else:
+						for row in result:
+							question_id = row[0]
+							title = row[1]
+							question = row[2]
+							question_date = row[3]
+							user_id = row[4]
+							questions.update({question_id:{"title": title, "question": question, "user_id": user_id, "question_date": question_date}})
+
+						return jsonify(questions)
+				except:
+					return jsonify({"message": "not found"}), 500
+				connection.commit()
+		finally:
+			pass
+api.add_resource(SingleUserQuestions, '/api/v1/allquestions')
+
+class Titles(Resource):
+	@tokens
+	def get(self, title):
+		data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
+		user_id=data['user_id']
+		try:
+				get_questions_by_title(title)
+				try:
+					get_questions_by_title(title)
+					result = cursor.fetchall()
+					questions = {}
+					if len(result) == 0:
+						return {"message": "no questions found"}, 404
+					else:
+						for row in result:
+							question_id = row[0]
+							title = row[1]
+							question = row[2]
+							question_date = row[3]
+							user_id = row[4]
+							questions.update({question_id:{"title": title, "question": question, "user_id": user_id, "question_date": question_date}})
+
+						return jsonify(questions)
+				except:
+					return jsonify({"message": "not found"}), 500
+				connection.commit()
+		finally:
+			pass
+api.add_resource(Titles, '/api/v1/questions/<string:title>')

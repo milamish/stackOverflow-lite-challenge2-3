@@ -53,6 +53,9 @@ def get_answers(question_id):
 def get_all_questions():
 	cursor.execute("SELECT * FROM questions;")
 
+def get_all_questions_by_a_user(user_id):
+	cursor.execute("SELECT * FROM questions WHERE user_id = '"+str(user_id)+"';", (user_id,))
+
 def get_user_id_and_question_id(question_id, user_id):
 	cursor.execute("SELECT * FROM answers WHERE answers.question_id='"+str(question_id)+"'\
 	 and answers.user_id ='"+str(user_id)+"';",((question_id,user_id),))
@@ -74,3 +77,6 @@ def get_user_id(question_id,user_id):
 
 def check_question(question):
 	cursor.execute("SELECT * FROM  questions WHERE question=%s;",(question,))
+
+def get_questions_by_title(title):
+	cursor.execute("SELECT * FROM  questions WHERE title=%s;",(title,))
