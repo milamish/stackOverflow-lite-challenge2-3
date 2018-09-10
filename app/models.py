@@ -56,6 +56,10 @@ def get_all_questions():
 def get_user_id_and_question_id(question_id, user_id):
 	cursor.execute("SELECT * FROM answers WHERE answers.question_id='"+str(question_id)+"'\
 	 and answers.user_id ='"+str(user_id)+"';",((question_id,user_id),))
+
+def get_user_id_and_question_id(answer_id, question_id, user_id):
+	cursor.execute("SELECT * FROM answers WHERE answers.question_id='"+str(question_id)+"' and answers.answer_id ='"+str(answer_id)+"'\
+	 and answers.user_id ='"+str(user_id)+"';",((answer_id, question_id,user_id),))
 	
 def modify_answer(question_id,answer,answer_id):
 	cursor.execute("update answers SET answer ='"+answer+"' WHERE question_id ='"+str(question_id)+"' and answer_id='"+str(answer_id)+"';",((answer,answer_id,question_id),))

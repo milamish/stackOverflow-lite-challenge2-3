@@ -173,7 +173,7 @@ class Modify(Resource):
 		data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
 		user_id = data['user_id']
 		answer = request.get_json()['answer'].strip()
-		get_user_id_and_question_id(question_id, user_id)
+		get_user_id_and_question_id(answer_id, question_id, user_id)
 		result = cursor.fetchone()
 		if result is not None:
 			modify_answer(question_id, answer, answer_id)

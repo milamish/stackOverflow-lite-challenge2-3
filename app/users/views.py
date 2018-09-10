@@ -66,7 +66,7 @@ class Register(Resource):
 				return{"message": "username taken"}, 409
 			check_email_address(emailaddress)
 			if cursor.fetchone() is not None:
-				return {"message": "emailaddress exists"}
+				return {"message": "emailaddress exists"}, 409
 			else:
 				register_user(fname, lname, username, emailaddress, phash)
 		except:
@@ -83,19 +83,19 @@ class Login(Resource):
 		password = request.get_json()['password'].strip()
 		
 		if not username:
-			return {"message": "please enter a username"}
+			return {"message": "please enter a username"}, 400
 		if not password:
-			return {"message": "please enter a password"}
+			return {"message": "please enter a password"}, 400
 		check_username(username)
 		result = cursor.fetchone()
 		if result is None:
-			return {"message": "your username is wrong"}
+			return {"message": "your username is wrong"}, 400
 		else:
 			if check_pwhash(password, result[5]):
 				token = jwt.encode({'username':username, 'user_id': result[0], 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60)}, app.config['SECRET_KEY'])
 				return {"message": "succesfuly logged in", 'token': token.decode ('UTF-8')}
 			else:
-				return {'message': 'invalid password or username'}			
+				return {'message': 'invalid password or username'}, 400			
 		connection.commit()
-		return {"message": "check your login details"}
+		return {"message": "check your login details"}, 400
 api.add_resource(Login, '/api/v1/auth/login')
