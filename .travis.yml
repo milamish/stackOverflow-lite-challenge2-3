@@ -13,7 +13,7 @@ before_script:
   - psql -c 'create database stack;' -U postgres
 script:
   - pytest
-  - pytest --cov-report term-missing --cov=app
+  - pytest --cov-report term-missing --cov=.
   - pytest --cov=.
   
 
