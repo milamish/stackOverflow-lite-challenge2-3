@@ -76,3 +76,25 @@ class GetQuestion(Resource):
 		finally:
 			pass
 api.add_resource(GetQuestion, '/api/v1/question/<int:question_id>')
+
+#this class allows a user to post an answer to a question using the question id then retrieving the question
+class PostAnswer(Resource):
+	@tokens
+	def post(self,question_id):
+		data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
+		user_id=data['user_id']
+		answer=request.get_json()['answer']
+		if not answer:
+			return {"message":"post an answer"}
+		try:
+			
+				get_question(question_id)
+				if cursor.fetchone() is None:
+					return {"message":"question does not exist"}, 404
+				else:
+					post_post_answer(answer, user_id, question_id)
+		except:
+			return{"message":"the question does not exist"}, 500
+		connection.commit()
+		return {"question_id":question_id,"answer":answer, "user_id":user_id}, 200
+api.add_resource(PostAnswer,'/api/v1/question/<int:question_id>/answer')
