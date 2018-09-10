@@ -178,3 +178,23 @@ class Modify(Resource):
 		connection.commit()
 		return jsonify({"answer":answer, "question_id":question_id})
 api.add_resource(Modify, '/api/v1/questions/<int:question_id>/answer')
+
+#this class allows authors of questions to delete their own questions
+class Remove(Resource):
+	@tokens
+	def delete(self,question_id):
+		data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
+		user_id=data['user_id']
+		
+		try:
+				get_user_id(question_id,user_id)
+				result=cursor.fetchone()
+				if result is None:
+					return {"message":"question does not exist"}, 404
+				else:
+					delete_question(user_id, question_id)
+		except:
+			return {"message": "unable to delete question"}, 500
+		connection.commit()
+		return {"question": "question succesfully deleted"}
+api.add_resource(Remove, '/api/v1/question/<int:question_id>')
