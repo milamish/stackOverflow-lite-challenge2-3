@@ -11,6 +11,7 @@ install:
 before_script:
   - cd app/tests
   - psql -c 'create database stack;' -U postgres
+  -database.yml.travis config
 script:
   - pytest
   - pytest --cov-report term-missing --cov=app
