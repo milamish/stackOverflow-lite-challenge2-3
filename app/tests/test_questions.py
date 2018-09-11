@@ -27,6 +27,10 @@ class Test_questions(unittest.TestCase):
 		get_question=json.dumps({"message":""})
 		self.assertEqual(app.test_client().get('/api/v1/question/<int:question_id>',).status_code,404)
 
+	def test_get_answers(self):
+		get_question=json.dumps({"message":""})
+		self.assertEqual(app.test_client().get('/api/v1/questions/<int:question_id>',).status_code,200)
+
 	def test_answer_question(self):
 		answer="how is you"
 		question_data=json.dumps({"answer":"how is you"})
@@ -42,7 +46,16 @@ class Test_questions(unittest.TestCase):
 		postquestion=app.test_client().post('/api/v1/questions',data=sign_data, headers=header)
 		result= json.loads(postquestion.data.decode())
 		self.assertEqual(postquestion.status_code,200)
-		#self.assertEqual(result ['message'], "Token is missing")
+		self.assertEqual(result ['message'], "Token is missing")
+
+	def test_modify_answer(self):
+		answer = "peolple"
+		mod_data = json.dumps({"answer": ""})
+		header={"content-type":"application/json"}
+		modify_answer=app.test_client().put('/api/v1/questions/<int:question_id>/answers/<int:answer_id>',data=mod_data, headers=header)
+		self.assertEqual(modify_answer.status_code, 404)
+		self.assertEqual(answer,answer)
+
 		
 	
 
