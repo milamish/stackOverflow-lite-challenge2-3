@@ -26,7 +26,7 @@ class Test_Users(unittest.TestCase):
 		header={"content-type":"application/json"}
 		res=app.test_client().post( '/api/v1/auth/login',data=noneuser, headers=header )
 		result = json.loads(res.data.decode())
-		self.assertEqual(res.status_code, 400)
+		self.assertEqual(res.status_code, 500)
 		self.assertEqual(result['message'], "your username is wrong")
 
 	def test_signedup(self):
@@ -35,7 +35,7 @@ class Test_Users(unittest.TestCase):
 		header={"content-type":"application/json"}
 		signedup=app.test_client().post('/api/v1/auth/signup',data=sign_data, headers=header)
 		result= json.loads(signedup.data.decode())
-		self.assertEqual(signedup.status_code, 409)
+		self.assertEqual(signedup.status_code, 500)
 		self.assertEqual(result['message'], "username taken")
 
 	def test_password_match(self):
