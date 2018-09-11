@@ -10,8 +10,10 @@ install:
   - pip install coveralls
 before_script:
   - cd app/tests
-  - psql -c 'create database stack;' -U postgres
-  -database.yml.travis config
+  #- psql -c 'create database stack;' -U postgres
+  #- database.yml.travis config
+  - psql -c "CREATE DATABASE testing_db;" -U postgres
+  - psql -c "CREATE USER foo WITH PASSWORD 'bar';" -U postgres
 script:
   - pytest
   - pytest --cov-report term-missing --cov=app
