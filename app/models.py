@@ -6,7 +6,7 @@ connection = psycopg2.connect(host = 'localhost', user = 'postgres', password = 
 cursor = connection.cursor()
 
 def table():
-	connection= psycopg2.connect(host = 'localhost', user = 'postgres', password = 'milamish8', dbname = 'stack')
+	connection = psycopg2.connect(host = 'localhost', user = 'postgres', password = 'milamish8', dbname = 'stack')
 	with connection.cursor() as cursor:
 		cursor.execute("CREATE TABLE IF NOT EXISTS users (user_id serial PRIMARY KEY,\
 			fname VARCHAR(100) NOT NULL,\
@@ -28,14 +28,14 @@ def table():
 	connection.commit()
 
 def check_username(username):
-	cursor.execute("SELECT * FROM  users WHERE username=%s;",(username,))
+	cursor.execute("SELECT * FROM  users WHERE username = %s;",(username,))
 
 def check_email_address(emailaddress):
-	cursor.execute("SELECT * FROM  users WHERE emailaddress='"+emailaddress+"';",(emailaddress,))
+	cursor.execute("SELECT * FROM  users WHERE emailaddress = '"+emailaddress+"';", (emailaddress,))
 
 def register_user(fname, lname, username, emailaddress, phash):
-	cursor.execute("INSERT INTO users(fname,lname,emailaddress,password,username) VALUES\
-		('"+fname+"', '"+lname+"', '"+emailaddress+"', '"+str(phash)+"', '"+username+"');", ((fname,lname,username,phash,emailaddress),))
+	cursor.execute("INSERT INTO users(fname, lname, emailaddress, password, username) VALUES\
+		('"+fname+"', '"+lname+"', '"+emailaddress+"', '"+str(phash)+"', '"+username+"');", ((fname, lname, username, phash, emailaddress),))
 
 def post_question(title, question, user_id):
 	cursor.execute("INSERT INTO questions(title,question,user_id) \

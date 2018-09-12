@@ -10,6 +10,7 @@ api=Api(app)
 from users.views import users
 from queries.views import queries
 from views import main
+from models import *
 
 app.register_blueprint(users)
 app.register_blueprint(queries)
