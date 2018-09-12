@@ -5,7 +5,7 @@ from flask import request
 from functools import wraps
 from flask_restful import Api
 from flask_restful import Resource
-from wtforms.validators import DataRequired
+#from wtforms.validators import DataRequired
 import psycopg2
 import jwt
 import datetime
@@ -32,11 +32,14 @@ def tokens(k):
         return k(*args, **kwargs)
     return decorators
 
-class UrlValidation():
+
+'''class UrlValidation():
     """url validator"""
     headers = {"Authorization": [DataRequired(), Resource]}
-    
-#this class allows a logged in user to post a question
+
+#this class allows a logged in user to post a question'''
+
+
 class PostQuestion(Resource):
     """posting questions"""
     @tokens
@@ -61,6 +64,8 @@ class PostQuestion(Resource):
         return {"title": title, "question": question, "user_id": user_id}, 200
 
 #this class allows users to get a single question using the question ID
+
+
 class GetQuestion(Resource):
     """fetch questions"""
     @tokens
@@ -92,6 +97,8 @@ class GetQuestion(Resource):
             pass
 
 #this class allows a user to post an answer to a question using the question id then retrieving the question
+
+
 class PostAnswer(Resource):
     """post answer"""
     @tokens
@@ -102,8 +109,7 @@ class PostAnswer(Resource):
         answer = request.get_json()['answer']
         if not answer:
             return {"message": "post an answer"}
-        try:
-            
+        try:         
                 get_question(question_id)
                 if cursor.fetchone() is None:
                     return {"message": "question does not exist"}, 404
@@ -115,14 +121,14 @@ class PostAnswer(Resource):
         return {"question_id": question_id, "answer": answer, "user_id": user_id}, 200
 
 #this class allows a user to retrieve all answers to a specific question using the question ID
+
+
 class Getanswers(Resource):
     """get answers"""
     @tokens
-    def get(self,question_id):
+    def get(self, question_id):
         """gets a question with all the answers given"""
         data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
-        user_id = data['user_id']
-        
         try:
                 get_answers(question_id)
                 try:
@@ -133,11 +139,11 @@ class Getanswers(Resource):
                         return {"message": "no answers found"}, 404
                     else:
                         for row in result:
-                            answer_id=row[0]
-                            answer=row[1]
-                            question=row[2]
-                            answer_date=row[4]
-                            questions.update({answer_id:{"question": question, "answer": answer, \
+                            answer_id = row[0]
+                            answer = row[1]
+                            question = row[2]
+                            answer_date = row[4]
+                            questions.update({answer_id: {"question": question, "answer": answer, \
                                 "answer_date": answer_date}})
 
                         return jsonify(questions)
@@ -148,6 +154,8 @@ class Getanswers(Resource):
             pass
 
 #this class allows users to view all asked questions
+
+
 class AllQuestions(Resource):
     """all questions asked"""
     @tokens
@@ -171,7 +179,7 @@ class AllQuestions(Resource):
                             question = row[2]
                             question_date = row[3]
                             user_id = row[4]
-                            questions.update({question_id:{"title": title, "question": question, "user_id": user_id,\
+                            questions.update({question_id: {"title": title, "question": question, "user_id": user_id,\
                              "question_date": question_date}})
 
                         return jsonify(questions)
@@ -182,15 +190,17 @@ class AllQuestions(Resource):
             pass
 
 #this class allows a user to edit their own answers
+
+
 class Modify(Resource):
     """modify answer"""
     @tokens
-    def put (self, question_id, answer_id):
+    def put(self, question_id, answer_id):
         """a user can only modify an answer posted by them"""
         data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
         user_id = data['user_id']
         answer = request.get_json()['answer'].strip()
-        get_user_id_and_question_id(answer_id, question_id, user_id)
+        get_user_id_and_answer_id(answer_id, question_id, user_id)
         result = cursor.fetchone()
         if result is not None:
             modify_answer(question_id, answer, answer_id)
@@ -200,17 +210,19 @@ class Modify(Resource):
         return{"answer": answer, "question_id": question_id, "answer_id": answer_id}, 201
 
 #this class allows authors of questions to delete their own questions
+
+
 class Remove(Resource):
     """delete a question"""
     @tokens
     def delete(self, question_id):
         """a user can only delete a question posted by them"""
         data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
-        user_id=data['user_id']
+        user_id = data['user_id']
         
         try:
-                get_user_id(question_id,user_id)
-                result=cursor.fetchone()
+                get_user_id(question_id, user_id)
+                result = cursor.fetchone()
                 if result is None:
                     return {"message": "question does not exist"}, 404
                 else:
@@ -220,13 +232,14 @@ class Remove(Resource):
         connection.commit()
         return {"question": "question succesfully deleted"}
 
+
 class SingleUserQuestions(Resource):
     """all questions asked by an individual user"""
     @tokens
     def get(self):
         """a user can fetch all questions asked by them"""
         data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
-        user_id=data['user_id']
+        user_id = data['user_id']
         try:
                 get_all_questions_by_a_user(user_id)
                 try:
@@ -242,7 +255,7 @@ class SingleUserQuestions(Resource):
                             question = row[2]
                             question_date = row[3]
                             user_id = row[4]
-                            questions.update({question_id:{"title": title, "question": question, "user_id": user_id,\
+                            questions.update({question_id: {"title": title, "question": question, "user_id": user_id,\
                              "question_date": question_date}})
 
                         return jsonify(questions)
@@ -252,13 +265,14 @@ class SingleUserQuestions(Resource):
         finally:
             pass
 
+
 class SearchTitles(Resource):
     """search by title"""
     @tokens
     def get(self, title):
         """get all questions under the same title"""
         data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
-        user_id=data['user_id']
+        user_id = data['user_id']
         try:
                 get_questions_by_title(title)
                 try:
@@ -274,7 +288,7 @@ class SearchTitles(Resource):
                             question = row[2]
                             question_date = row[3]
                             user_id = row[4]
-                            questions.update({question_id:{"title": title, "question": question, "user_id": user_id,\
+                            questions.update({question_id: {"title": title, "question": question, "user_id": user_id,\
                              "question_date": question_date}})
 
                         return jsonify(questions)

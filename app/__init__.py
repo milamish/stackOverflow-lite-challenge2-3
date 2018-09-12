@@ -11,6 +11,8 @@ from users.views import users
 from queries.views import queries
 from views import main
 from models import *
+from tests.test_questions import *
+from tests.test_users import *
 
 app.register_blueprint(users)
 app.register_blueprint(queries)

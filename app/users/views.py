@@ -3,6 +3,7 @@ import hashlib
 import datetime
 import re
 import jwt
+import psycopg2
 import models
 from flask import Blueprint
 from flask import request
@@ -14,17 +15,20 @@ from models import *
 users = Blueprint('users', __name__)
 
 
-"""hash password"""
 def pwhash(password):
+    """hash password"""
     return hashlib.sha256(str.encode(password)).hexdigest()
 
-"""check hashed password"""
+
 def check_pwhash(password, hash):
+    """check hashed password"""
     if pwhash(password) == hash:
         return True
     return False
 
 #this class allows a user to create an account by signing up
+
+
 class Register(Resource):
     """Register new users"""
     def post(self):
@@ -69,9 +73,11 @@ class Register(Resource):
         except:
             return{"message": "unable to register!"}, 500
         connection.commit()
-        return{"fname": fname,"lname": lname, "emailaddress": emailaddress, "username": username}
+        return{"fname": fname, "lname": lname, "emailaddress": emailaddress, "username": username}
         
 #this class allows a user with an account to login
+
+
 class Login(Resource):
     """login registered user"""
     def post(self):
@@ -89,7 +95,7 @@ class Login(Resource):
             return{"message": "your username is wrong"}, 400
         else:
             if check_pwhash(password, result[5]):
-                token = jwt.encode({'username':username, 'user_id': result[0], 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60)}, app.config['SECRET_KEY'])
+                token = jwt.encode({'username': username, 'user_id': result[0], 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60)}, app.config['SECRET_KEY'])
                 return{"message": "succesfuly logged in", 'token': token.decode ('UTF-8')}
         connection.commit()
         return{"message": "check your login details"}, 400
