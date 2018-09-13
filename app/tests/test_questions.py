@@ -6,7 +6,7 @@ import re
 import os,sys
 sys.path.insert(0, os.path.abspath(".."))
 
-from __init__ import app
+from __init__ import *
 
 class Test_questions(unittest.TestCase):
 	def setUp(self):
