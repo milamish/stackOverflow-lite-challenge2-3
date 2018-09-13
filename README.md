@@ -9,15 +9,18 @@ stackOverflow-lite is a a platform whereby users interact with each other throug
 ```
 features include
 ```
-*post question
-*answer question
-*modify question
-*delete question
-*upvote/downvote a question
-*fetch one question with all answers
-*fetch all question
-*search for a question
-
+```
+	*post question
+	*answer question
+	*modify question
+	*delete question
+	*upvote/downvote a question
+	*fetch one question with all answers
+	*fetch all question
+	*search for a question
+```
+check <a href= "https://stackoverflowliteapi1.docs.apiary.io/#">here</a> for documentation and you can access
+the hosted app on<a href= "https://stacklit2.herokuapp.com/api/v1/">heroku</a> and on<a href= "https://www.pivotaltracker.com/n/projects/2193473">pivortal tracker</a> for the stories.
 
 functionality              | Endpoint                                                 |      method           |
 ---------------------------|----------------------------------------------------------|-----------------------|
