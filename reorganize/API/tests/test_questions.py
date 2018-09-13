@@ -1,9 +1,6 @@
 import unittest
 import json
 import re
-import jwt
-import pyjwt
-import datetime
 
 import os, sys
 sys.path.insert(0, os.path.abspath(".."))
@@ -75,23 +72,6 @@ class Test_questions(unittest.TestCase):
         self.assertEqual(search_question.status_code, 200)
         self.assertEqual(result['message'], "Token is missing")
 
-    def test_question_conflict(self):
-        username = "mish"
-        result = "1"
-        token = jwt.encode({'username': username, 'user_id': result[0], 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60)}, app.config['SECRET_KEY'])
-        token2= json.dumps(token.decode ('UTF-8'))
-        question = "is it rainning?"
-        title = "Weather"
-        sign_data = json.dumps({"title": title, "question": question})
-        header = {"content-type": "application/json", "x-access-token": token}
-        postquestion = app.test_client().post('/api/v1/questions', data=sign_data, headers=header)
-        result = json.loads(postquestion.data.decode())
-        sign_data2 = json.dumps({"title": title, "question": question})
-        postquestion2 = app.test_client().post('/api/v1/questions', data=sign_data2, headers=header)
-        result2 = json.loads(postquestion2.data.decode())
-        self.assertEqual(postquestion.status_code, 409)
-        self.assertEqual(result, {'this question exists': 'is it rainning?'})
-        
         
 if __name__ == '__main__':
     unittest.main()
