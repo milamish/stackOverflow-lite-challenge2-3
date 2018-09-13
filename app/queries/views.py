@@ -10,7 +10,7 @@ import jwt
 import datetime
 
 
-from __init__ import *
+from __init__ import app, api
 from models import *
 
 queries = Blueprint('queries', __name__)
@@ -42,10 +42,10 @@ class PostQuestion(Resource):
 			return{"message": "post a question"}
 				
 		try:
-			check_question(question)
+			Questions.check_question(question)
 			if cursor.fetchone() is not None:
 				return{"this question exists": question}, 409
-			post_question(title, question, user_id)
+			Questions.post_question(title, question, user_id)
 		except:
 			return{"message": "unable to post a question"}, 500
 		connection.commit()
@@ -60,9 +60,9 @@ class GetQuestion(Resource):
 
 		try:
 			
-				get_question(question_id)
+				Questions.get_question(question_id)
 				try:
-					get_question(question_id)
+					Questions.get_question(question_id)
 					result = cursor.fetchone()
 					if result is None:
 						return {"message": "question_id does not exist"}, 404
@@ -91,11 +91,11 @@ class PostAnswer(Resource):
 			return {"message": "post an answer"}
 		try:
 			
-				get_question(question_id)
+				Questions.get_question(question_id)
 				if cursor.fetchone() is None:
 					return {"message": "question does not exist"}, 404
 				else:
-					post_post_answer(answer, user_id, question_id)
+					Questions.post_answer(answer, user_id, question_id)
 		except:
 			return{"message": "the question does not exist"}, 500
 		connection.commit()
@@ -109,9 +109,9 @@ class Getanswers(Resource):
 		user_id = data['user_id']
 		
 		try:
-				get_answers(question_id)
+				Questions.get_answers(question_id)
 				try:
-					get_answers(question_id)
+					Questions.get_answers(question_id)
 					result = cursor.fetchall()
 					questions = {}
 					if len(result) == 0:
@@ -140,9 +140,9 @@ class AllQuestions(Resource):
 		user_id = data['user_id']
 
 		try:
-				get_all_questions()
+				Questions.get_all_questions()
 				try:
-					get_all_questions()
+					Questions.get_all_questions()
 					result = cursor.fetchall()
 					questions = {}
 					if len(result) == 0:
@@ -171,10 +171,10 @@ class Modify(Resource):
 		data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
 		user_id = data['user_id']
 		answer = request.get_json()['answer'].strip()
-		get_user_id_and_question_id(answer_id, question_id, user_id)
+		Questions.get_user_id_and_question_id(answer_id, question_id, user_id)
 		result = cursor.fetchone()
 		if result is not None:
-			modify_answer(question_id, answer, answer_id)
+			Questions.modify_answer(question_id, answer, answer_id)
 		else:
 			return {"message": "entry does not exist"}, 404
 		connection.commit()
@@ -188,12 +188,12 @@ class Remove(Resource):
 		user_id=data['user_id']
 		
 		try:
-				get_user_id(question_id,user_id)
+				Questions.get_user_id(question_id,user_id)
 				result=cursor.fetchone()
 				if result is None:
 					return {"message": "question does not exist"}, 404
 				else:
-					delete_question(user_id, question_id)
+					Questions.delete_question(user_id, question_id)
 		except:
 			return {"message": "unable to delete question"}, 500
 		connection.commit()
@@ -205,9 +205,9 @@ class SingleUserQuestions(Resource):
 		data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
 		user_id=data['user_id']
 		try:
-				get_all_questions_by_a_user(user_id)
+				Questions.get_all_questions_by_a_user(user_id)
 				try:
-					get_all_questions_by_a_user(user_id)
+					Questions.get_all_questions_by_a_user(user_id)
 					result = cursor.fetchall()
 					questions = {}
 					if len(result) == 0:
@@ -235,9 +235,9 @@ class Titles(Resource):
 		data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
 		user_id=data['user_id']
 		try:
-				get_questions_by_title(title)
+				Questions.get_questions_by_title(title)
 				try:
-					get_questions_by_title(title)
+					Questions.get_questions_by_title(title)
 					result = cursor.fetchall()
 					questions = {}
 					if len(result) == 0:

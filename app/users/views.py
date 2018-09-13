@@ -10,21 +10,26 @@ import re
 import hashlib
 import jwt
 import datetime
+import jwt
 
-from __init__ import *
+from __init__ import app, api
 from models import *
 
 users = Blueprint('users', __name__)
 
+
 def pwhash(password):
     return hashlib.sha256(str.encode(password)).hexdigest()
+
 
 def check_pwhash(password, hash):
     if pwhash(password) == hash:
         return True
     return False
 
-#this class allows a user to create an account by signing up
+# this class allows a user to create an account by signing up
+
+
 class Register(Resource):
 	def post(self):
 		fname = request.get_json()['fname'].strip()
@@ -61,14 +66,14 @@ class Register(Resource):
 			return {"message": "email address not valid"}
 			
 		try:
-			check_username(username)
+			RegisterUser.check_username(username)
 			if cursor.fetchone() is not None:
 				return{"message": "username taken"}, 409
-			check_email_address(emailaddress)
+			RegisterUser.check_email_address(emailaddress)
 			if cursor.fetchone() is not None:
 				return {"message": "emailaddress exists"}, 409
 			else:
-				register_user(fname, lname, username, emailaddress, phash)
+				RegisterUser.register_user(fname, lname, username, emailaddress, phash)
 		except:
 			return {"message": "unable to register!"}, 500
 		connection.commit()
@@ -85,7 +90,7 @@ class Login(Resource):
 			return {"message": "please enter a username"}, 400
 		if not password:
 			return {"message": "please enter a password"}, 400
-		check_username(username)
+		RegisterUser.check_username(username)
 		result = cursor.fetchone()
 		if result is None:
 			return {"message": "your username is wrong"}, 400

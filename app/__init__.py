@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, Blueprint
 from flask_restful import Api, Resource
 import flask_restful
 import psycopg2
+import models
 
 app = Flask(__name__)
 app.config ['SECRET_KEY'] = 'mish'
