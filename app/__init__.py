@@ -6,7 +6,7 @@ import models
 
 app = Flask(__name__)
 app.config ['SECRET_KEY'] = 'mish'
-api=Api(app)
+api = Api(app)
 
 from users.views import users
 from queries.views import queries

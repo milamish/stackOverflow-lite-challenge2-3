@@ -42,7 +42,7 @@ class Test_questions(unittest.TestCase):
 		title = ""
 		sign_data = json.dumps({"title": title, "question": question})
 		header = {"content-type": "application/json"}
-		postquestion = app.test_client().post('/api/v1/questions',data=sign_data, headers = header)
+		postquestion = app.test_client().post('/api/v1/questions', data=sign_data, headers=header)
 		result = json.loads(postquestion.data.decode())
 		self.assertEqual(postquestion.status_code, 200)
 		self.assertEqual(result['message'], "Token is missing")
@@ -55,6 +55,6 @@ class Test_questions(unittest.TestCase):
 		self.assertEqual(modify_answer.status_code, 404)
 		self.assertEqual(answer, answer)
 
-
+		
 if __name__ == '__main__':
 	unittest.main()

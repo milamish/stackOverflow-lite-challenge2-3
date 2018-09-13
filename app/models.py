@@ -1,11 +1,11 @@
 import psycopg2
 
-
-connection = psycopg2.connect(host = 'localhost', user = 'postgres', password = 'milamish8', dbname = 'stack')
+connection = psycopg2.connect(host='localhost', user='postgres', password='milamish8', dbname='stack')
 cursor = connection.cursor()
 
+
 def table():
-	connection= psycopg2.connect(host = 'localhost', user = 'postgres', password = 'milamish8', dbname = 'stack')
+	connection = psycopg2.connect(host='localhost', user='postgres', password='milamish8', dbname='stack')
 	with connection.cursor() as cursor:
 		cursor.execute("CREATE TABLE IF NOT EXISTS users (user_id serial PRIMARY KEY,\
 			fname VARCHAR(100) NOT NULL,\
@@ -63,7 +63,7 @@ class Questions():
 		cursor.execute("SELECT * FROM answers WHERE answers.question_id = '"+str(question_id)+"'\
 		and answers.user_id ='"+str(user_id)+"';", ((question_id, user_id),))
 
-	def get_user_id_and_question_id(answer_id, question_id, user_id):
+	def get_user_id_and_answer_id(answer_id, question_id, user_id):
 		cursor.execute("SELECT * FROM answers WHERE answers.question_id = '"+str(question_id)+"' \
 			and answers.answer_id ='"+str(answer_id)+"'\
 		and answers.user_id ='"+str(user_id)+"';",((answer_id, question_id, user_id),))

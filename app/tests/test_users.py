@@ -2,7 +2,7 @@ import unittest
 import json
 import re
 
-import os,sys
+import os, sys
 sys.path.insert(0, os.path.abspath(".."))
 
 from __init__ import app, api
@@ -12,7 +12,7 @@ class Test_Users(unittest.TestCase):
 		pass
 		
 	def test_Home(self):
-		home =json.dumps({"message":"you can post your question"})
+		home =json.dumps({"message": "you can post your question"})
 		self.assertEqual(app.test_client().get('/api/v1/',).status_code,200)
 
 	def test_login(self):
@@ -23,7 +23,7 @@ class Test_Users(unittest.TestCase):
 	def test_unregistered_user_login(self):
 		noneuser = json.dumps({"username": "milithree", "password": "Milamish8"})
 		header = {"content-type": "application/json"}
-		res=app.test_client().post( '/api/v1/auth/login', data=noneuser, headers=header)
+		res = app.test_client().post('/api/v1/auth/login', data=noneuser, headers=header )
 		result = json.loads(res.data.decode())
 		self.assertEqual(res.status_code, 500)
 		#self.assertEqual(result['message'], "your username is wrong")
@@ -58,9 +58,9 @@ class Test_Users(unittest.TestCase):
 		header = {"content-type": "application/json"}
 		signedup = app.test_client().post('/api/v1/auth/signup', data=sign_data, headers=header)
 		result = json.loads(signedup.data.decode())
-		sign_in = json.dumps({"password": password,"username": username})
+		sign_in = json.dumps({"password": password, "username": username})
 		header = {"content-type": "application/json"}
-		passwordmatch = app.test_client().post('/api/v1/auth/login',data=sign_in, headers=header)
+		passwordmatch = app.test_client().post('/api/v1/auth/login', data=sign_in, headers=header)
 		result2 = json.loads(passwordmatch.data.decode())
 		self.assertEqual(result['message'], "password do not match")
 		#self.assertEqual(result2['message'], "succesfuly logged in")
@@ -77,5 +77,5 @@ class Test_Users(unittest.TestCase):
 		self.assertEqual(match, match)
 
 
-if __name__ =='__main__':
-    unittest.main()
+if __name__ == '__main__':
+	unittest.main()
