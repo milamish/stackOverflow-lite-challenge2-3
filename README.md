@@ -19,8 +19,8 @@ features include
 	*fetch all question
 	*search for a question
 ```
-check <a href= "https://stackoverflowliteapi1.docs.apiary.io/#">here</a> for documentation and you can access
-the hosted app on<a href= "https://stacklit2.herokuapp.com/api/v1/">heroku</a> and on<a href= "https://www.pivotaltracker.com/n/projects/2193473">pivortal tracker</a> for the stories.
+check <a href= "https://stackoverflowliteapi1.docs.apiary.io/#">here</a> for documentation, you can access
+the hosted app on <a href= "https://stacklit2.herokuapp.com/api/v1/">heroku</a> and on<a href= "https://www.pivotaltracker.com/n/projects/2193473">pivortal tracker</a> for the stories.
 
 functionality              | Endpoint                                                 |      method           |
 ---------------------------|----------------------------------------------------------|-----------------------|
