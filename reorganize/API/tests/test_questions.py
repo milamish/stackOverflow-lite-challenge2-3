@@ -2,6 +2,7 @@ import unittest
 import json
 import re
 import jwt
+import pyjwt
 import datetime
 
 import os, sys
