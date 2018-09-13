@@ -6,6 +6,7 @@ import os, sys
 sys.path.insert(0, os.path.abspath(".."))
 
 from API import app, api
+from API.users.views import users
 
 class Test_Users(unittest.TestCase):
     def setUp(self):

@@ -6,6 +6,7 @@ import os, sys
 sys.path.insert(0, os.path.abspath(".."))
 
 from  API import app 
+from API.queries.views import queries
 
 
 class Test_questions(unittest.TestCase):
