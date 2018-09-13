@@ -18,6 +18,11 @@ features include
 *fetch all question
 *search for a question
 
+
+method      | Endpoin                 | Functionality       |
+------------|-------------------------|---------------------|
+signup      |                         |                     |
+------------|-------------------------|---------------------|
 to run this app
 
 set up database environment for the app
