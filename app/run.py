@@ -3,5 +3,5 @@ from models import table, RegisterUser, Questions
 
 
 if __name__ == "__main__":
-	table()
-	app.run(debug=True)
+    table()
+    app.run(debug=True)

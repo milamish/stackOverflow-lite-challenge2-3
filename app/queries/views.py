@@ -123,70 +123,70 @@ class PostAnswer(Resource):
 
 
 class Getanswers(Resource):
-	@tokens
-	def get(self,question_id):
-		data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
-		user_id = data['user_id']
-		
-		try:
-				Questions.get_answers(question_id)
-				try:
-					Questions.get_answers(question_id)
-					result = cursor.fetchall()
-					questions = {}
-					if len(result) == 0:
-						return {"message": "no answers found"}, 404
-					else:
-						for row in result:
-							answer_id=row[0]
-							answer=row[1]
-							question=row[2]
-							answer_date=row[4]
-							questions.update({answer_id:{"question": question, "answer": answer, \
-								"answer_date": answer_date}})
+    @tokens
+    def get(self,question_id):
+        data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
+        user_id = data['user_id']
+        
+        try:
+                Questions.get_answers(question_id)
+                try:
+                    Questions.get_answers(question_id)
+                    result = cursor.fetchall()
+                    questions = {}
+                    if len(result) == 0:
+                        return {"message": "no answers found"}, 404
+                    else:
+                        for row in result:
+                            answer_id=row[0]
+                            answer=row[1]
+                            question=row[2]
+                            answer_date=row[4]
+                            questions.update({answer_id:{"question": question, "answer": answer, \
+                                "answer_date": answer_date}})
 
-						return jsonify(questions)
-				except:
-					return ({"message": "entry not found"}), 500
-				connection.commit()
-		finally:
-			pass
+                        return jsonify(questions)
+                except:
+                    return ({"message": "entry not found"}), 500
+                connection.commit()
+        finally:
+            pass
 
 #this class allows users to view all asked questions
 
 
 class AllQuestions(Resource):
-	"""fetch all questions"""
-	@tokens
-	def get(self):
-		"""get all asked questions"""
-		data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
-		user_id = data['user_id']
+    """fetch all questions"""
+    @tokens
+    def get(self):
+        """get all asked questions"""
+        data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
+        user_id = data['user_id']
 
-		try:
-				Questions.get_all_questions()
-				try:
-					Questions.get_all_questions()
-					result = cursor.fetchall()
-					questions = {}
-					if len(result) == 0:
-						return {"message": "no questions found"}, 404
-					else:
-						for row in result:
-							question_id = row[0]
-							title = row[1]
-							question = row[2]
-							question_date = row[3]
-							user_id = row[4]
-							questions.update({question_id:{"title": title, "question": question, "user_id": user_id,\
-							 "question_date": question_date}})
+        try:
+                Questions.get_all_questions()
+                try:
+                    Questions.get_all_questions()
+                    result = cursor.fetchall()
+                    questions = {}
+                    if len(result) == 0:
+                        return {"message": "no questions found"}, 404
+                    else:
+                        for row in result:
+                            question_id = row[0]
+                            title = row[1]
+                            question = row[2]
+                            question_date = row[3]
+                            user_id = row[4]
+                            questions.update({question_id:{"title": title, "question": question, "user_id": user_id,\
+                             "question_date": question_date}})
 
-						return jsonify(questions)
-				except:
-					return jsonify({"message": "not found"}), 500
-				connection.commit()
-		finally:
-			pass
+                        return jsonify(questions)
+                except:
+                    return jsonify({"message": "not found"}), 500
+                connection.commit()
+        finally:
+            pass
 
 #this class allows a user to edit their own answers
 
