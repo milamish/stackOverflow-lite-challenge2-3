@@ -2,10 +2,11 @@ from flask import Flask, request, jsonify, Blueprint
 from flask_restful import Api, Resource
 import flask_restful
 import psycopg2
+import models
 
 app = Flask(__name__)
 app.config ['SECRET_KEY'] = 'mish'
-api=Api(app)
+api = Api(app)
 
 from users.views import users
 from queries.views import queries
