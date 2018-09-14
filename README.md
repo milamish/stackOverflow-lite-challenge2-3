@@ -22,6 +22,27 @@ features include
 check <a href= "https://stackoverflowliteapi1.docs.apiary.io/#">here</a> for documentation, you can access
 the hosted app on <a href= "https://stacklit2.herokuapp.com/api/v1/">heroku</a> and on<a href= "https://www.pivotaltracker.com/n/projects/2193473">pivortal tracker</a> for the stories.
 
+
+###to run this app
+
+set up database environment for the app
+```
+install postgress database on your computer
+```
+create a virtual environment
+```
+pip install py -3 -m venv venv(for windows)
+```
+activate virtual environment
+```
+venv\Scripts\activate(for windows)
+```
+pip install requirements
+```
+pip install -r requirements.txt
+```
+test the functionality of the endpoints on postman
+
 functionality              | Endpoint                                                 |      method           |
 ---------------------------|----------------------------------------------------------|-----------------------|
 signup                     | /api/v1/auth/signup                                      |       POST            |
@@ -46,23 +67,3 @@ search a quetsion by title |/api/v1/questions/<string:title>                    
 ---------------------------|----------------------------------------------------------|-----------------------|
 get all questions by a user|/api/v1/allquestions                                      |       GET             |
 ---------------------------|----------------------------------------------------------|-----------------------|
-
-to run this app
-
-set up database environment for the app
-```
-install postgress database on your computer
-```
-create a virtual environment
-```
-pip install py -3 -m venv venv(for windows)
-```
-activate virtual environment
-```
-venv\Scripts\activate(for windows)
-```
-pip install requirements
-```
-pip install -r requirements.txt
-```
-test the functionality of the endpoints on postman
