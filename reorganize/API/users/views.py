@@ -7,6 +7,7 @@ import psycopg2
 from flask import Blueprint
 from flask import request
 from flask_restful import Resource
+#from flask_cors import CORS
 
 from API import app, api
 from API.models import *
@@ -26,7 +27,7 @@ def check_pwhash(password, hash):
         return True
     return False
 
-#this class allows a user to create an account by signing up
+# this class allows a user to create an account by signing up
 
 
 class Register(Resource):

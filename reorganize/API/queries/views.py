@@ -5,6 +5,7 @@ from flask import request
 from functools import wraps
 from flask_restful import Api
 from flask_restful import Resource
+#from flask_cors import CORS
 import psycopg2
 import jwt
 import datetime
@@ -62,7 +63,7 @@ class PostQuestion(Resource):
         connection.commit()
         return {"title": title, "question": question, "user_id": user_id}, 201
 
-#this class allows users to get a single question using the question ID
+# this class allows users to get a single question using the question ID
 
 
 class GetQuestion(Resource):
@@ -206,20 +207,17 @@ class Modify(Resource):
             Questions.modify_answer(question_id, answer, answer_id)
         else:
             return {"message": "entry does not exist"}, 404
-        connection.commit()
-        return{"answer": answer, "question_id": question_id, "answer_id": answer_id}, 201
-
+        accept_answer = request.get_json()['accept_answer']
         Questions.get_user_id_and_question_id(question_id, user_id)
         result = cursor.fetchone
-        print(result)
         if result is not None:
-            Questions.mark_answer(user_id, question_id, accept_answer)
+            Questions.mark_answer(question_id, accept_answer)
         else:
             return {"message": "unauthorised"}, 404
         connection.commit()
         return{"answer": answer, "question_id": question_id, "answer_id": answer_id, "accept_answer": accept_answer}, 201
             
-        
+       
 # this class allows authors of questions to delete their own questions
 
 

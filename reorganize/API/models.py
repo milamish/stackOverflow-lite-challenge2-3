@@ -87,6 +87,6 @@ class Questions():
     def get_questions_by_title(title):
         cursor.execute("SELECT * FROM  questions WHERE title = %s;", (title,))
 
-    def mark_answer(user_id, question_id, accept_answer):
-        cursor.execute("update answers SET accept_answer = '"+accept_answer+"' WHERE question_id = '"+str(question_id)+"' \
-        and user_id = '"+str(user_id)+"';", ((user_id, question_id, accept_answer),))
+    def mark_answer(question_id, accept_answer):
+        cursor.execute("update answers SET accept_answer = '"+accept_answer+"' WHERE question_id = '"+str(question_id)+"';",\
+         ((question_id, accept_answer),))
