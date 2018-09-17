@@ -23,11 +23,11 @@ def tokens(k):
         """decorators for pursing token to different functions"""
         token = request.headers.get('x-access-token')
         if not token:
-            return jsonify({'message': 'Token is missing'})
+            return{'message': 'Token is missing'}, 403
         try:
             data = jwt.decode(token, app.config['SECRET_KEY'])
         except:
-            return jsonify({'message': 'Token is invalid'})
+            return{'message': 'Token is invalid'}, 403
         return k(*args, **kwargs)
     return decorators
 
@@ -60,7 +60,7 @@ class PostQuestion(Resource):
         except:
             return{"message": "unable to post a question"}, 500
         connection.commit()
-        return {"title": title, "question": question, "user_id": user_id}, 200
+        return {"title": title, "question": question, "user_id": user_id}, 201
 
 #this class allows users to get a single question using the question ID
 
@@ -117,7 +117,7 @@ class PostAnswer(Resource):
         except:
             return{"message": "the question does not exist"}, 500
         connection.commit()
-        return {"question_id": question_id, "answer": answer, "user_id": user_id}, 200
+        return {"question_id": question_id, "answer": answer, "user_id": user_id}, 201
 
 #this class allows a user to retrieve all answers to a specific question using the question ID
 
@@ -199,6 +199,7 @@ class Modify(Resource):
         data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
         user_id = data['user_id']
         answer = request.get_json()['answer'].strip()
+        accept_answer = request.get_json()['accept_answer']
         Questions.get_user_id_and_answer_id(answer_id, question_id, user_id)
         result = cursor.fetchone()
         if result is not None:
@@ -208,7 +209,18 @@ class Modify(Resource):
         connection.commit()
         return{"answer": answer, "question_id": question_id, "answer_id": answer_id}, 201
 
-#this class allows authors of questions to delete their own questions
+        Questions.get_user_id_and_question_id(question_id, user_id)
+        result = cursor.fetchone
+        print(result)
+        if result is not None:
+            Questions.mark_answer(user_id, question_id, accept_answer)
+        else:
+            return {"message": "unauthorised"}, 404
+        connection.commit()
+        return{"answer": answer, "question_id": question_id, "answer_id": answer_id, "accept_answer": accept_answer}, 201
+            
+        
+# this class allows authors of questions to delete their own questions
 
 
 class Remove(Resource):
