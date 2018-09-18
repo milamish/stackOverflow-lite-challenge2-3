@@ -21,6 +21,10 @@ features include
 ```
 check <a href= "https://stackoverflowliteapi1.docs.apiary.io/#">here</a> for documentation, you can access
 the hosted app on <a href= "https://stacklit2.herokuapp.com/api/v1/">heroku</a> and on<a href= "https://www.pivotaltracker.com/n/projects/2193473">pivortal tracker</a> for the stories.
+```
+heroku https://stacklit2.herokuapp.com/api/v1/
+Apiary documentation https://stackoverflowliteapi1.docs.apiary.io/#
+```
 
 
 <h2><strong>to run this app</strong></h2>
