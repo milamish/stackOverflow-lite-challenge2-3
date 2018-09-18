@@ -52,20 +52,26 @@ start the app (run.py) and the relations will automatically be created on the da
 <h2><strong>test the functionality of the endpoints on postman</strong></h2>
 
 functionality              | Endpoint                                                 |      method           |
-						   |                                                          |                       |
+---------------------------|----------------------------------------------------------|-----------------------|
 signup                     | /api/v1/auth/signup                                      |       POST            |
-|                          |                                                          |                       |
+
 login                      |/api/v1/auth/login                                        |       POST            |
-|                          |                                                          |                       |
+
 post question              |/api/v1/questions                                         |       POST            |
-|                          |                                                          |                       |
+
 get a question             |/api/v1/question/<int:question_id>                        |       GET             |
-|                          |                                                          |                       |
+
 post an answer             |/api/v1/questions/<int:question_id>/answers               |       POST            |
-|                          |                                                          |                       |
-|get an answered question  |/api/v1/questions/<int:question_id>                       |       GET             |
-|fetch all questions       |/api/v1/questions                                         |       GET             |
-|modify an answer          |api/v1/questions/<int:question_id>/answers/<int:answer_id>|       PUT             |
-|delete an question        |/api/v1/questions/<int:question_id>                       |       DELETE          |
-|search a quetsion by title|/api/v1/questions/<string:title>                          |       GET             |
-|get all questions by a use|/api/v1/allquestions                                      |       GET             |
+
+get an answered question   |/api/v1/questions/<int:question_id>                       |       GET             |
+
+fetch all questions        |/api/v1/questions                                         |       GET             |
+
+modify an answer           |api/v1/questions/<int:question_id>/answers/<int:answer_id>|       PUT             |
+
+delete an question         |/api/v1/questions/<int:question_id>                       |       DELETE          |
+
+search a quetsion by title |/api/v1/questions/<string:title>                          |       GET             |
+
+get all questions by a user|/api/v1/allquestions                                      |       GET             |
+---------------------------|----------------------------------------------------------|-----------------------|
