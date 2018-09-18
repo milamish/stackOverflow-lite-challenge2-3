@@ -22,7 +22,7 @@ features include
 check <a href= "https://stackoverflowliteapi1.docs.apiary.io/#">here</a> for documentation, you can access
 the hosted app on <a href= "https://stacklit2.herokuapp.com/api/v1/">heroku</a> and on<a href= "https://www.pivotaltracker.com/n/projects/2193473">pivortal tracker</a> for the stories.
 
-heroku "https://stacklit2.herokuapp.com/api/v1/"
+heroku "https://stacklit2.herokuapp.com/api/v1/" <br>
 Apiary documentation "https://stackoverflowliteapi1.docs.apiary.io/#"
 
 
@@ -44,7 +44,7 @@ pip install requirements
 ```
 pip install -r requirements.txt
 ```
-test the functionality of the endpoints on postman
+<h2><strong>test the functionality of the endpoints on postman</strong></h2>
 
 functionality              | Endpoint                                                 |      method           |
 ---------------------------|----------------------------------------------------------|-----------------------|
