@@ -74,7 +74,7 @@ class Register(Resource):
         except:
             return{"message": "unable to register!"}, 500
         connection.commit()
-        return{"fname": fname, "lname": lname, "emailaddress": emailaddress, "username": username}
+        return{"message": "succesfully registered", "fname": fname, "lname": lname, "emailaddress": emailaddress, "username": username}
         
 #this class allows a user with an account to login
 

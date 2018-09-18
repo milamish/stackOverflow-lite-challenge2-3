@@ -82,7 +82,7 @@ class Test_questions(unittest.TestCase):
         token2 = json.dumps(token.decode ('UTF-8'))
         header = {"content-type": "application/json", "x-access-token": token}
         modify_answer = app.test_client().put('/api/v1/questions/2/answers/4',data=mod_data, headers=header)
-        self.assertEqual(modify_answer.status_code, 404)
+        self.assertEqual(modify_answer.status_code, 201)
 
     def test_delete_answer(self):
         header = {"content-type": "application/json"}

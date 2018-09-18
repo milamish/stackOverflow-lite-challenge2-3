@@ -205,19 +205,18 @@ class Modify(Resource):
         result = cursor.fetchone()
         if result is not None:
             Questions.modify_answer(question_id, answer, answer_id)
-        else:
-            return {"message": "entry does not exist"}, 404
-        accept_answer = request.get_json()['accept_answer']
+            connection.commit()
+            return{"answer": answer, "question_id": question_id, "answer_id": answer_id, "accept_answer": accept_answer}, 201
         Questions.get_user_id_and_question_id(question_id, user_id)
         result = cursor.fetchone
         if result is not None:
             Questions.mark_answer(question_id, accept_answer)
+            connection.commit()
+            return {"answer": answer, "accept_answer": accept_answer}, 201
         else:
-            return {"message": "unauthorised"}, 404
+            return {"message": "entry not found"}, 404
         connection.commit()
-        return{"answer": answer, "question_id": question_id, "answer_id": answer_id, "accept_answer": accept_answer}, 201
-            
-       
+               
 # this class allows authors of questions to delete their own questions
 
 
