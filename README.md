@@ -74,4 +74,4 @@ delete an question         |/api/v1/questions/<int:question_id>                 
 search a quetsion by title |/api/v1/questions/<string:title>                          |       GET             |
 |                          |                                                          |
 get all questions by a user|/api/v1/allquestions                                      |       GET             |
----------------------------|----------------------------------------------------------|-----------------------|
+|                          |                                                          |
