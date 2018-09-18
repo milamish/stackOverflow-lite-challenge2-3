@@ -44,6 +44,12 @@ pip install requirements
 ```
 pip install -r requirements.txt
 ```
+<h2><strong>to set app models</strong></h2>
+```
+create database 'stack' with user 'postgres' and password 'milamish8'
+start the app (run.py) and the relations will automatically be created on the database
+
+
 <h2><strong>test the functionality of the endpoints on postman</strong></h2>
 
 functionality              | Endpoint                                                 |      method           |
