@@ -54,7 +54,7 @@ start the app (run.py) and the relations will automatically be created on the da
 functionality              | Endpoint                                                 |      method           |
 ---------------------------|----------------------------------------------------------|-----------------------|
 signup                     | /api/v1/auth/signup                                      |       POST            |
-|                          |                                                          |
+---------------------------|----------------------------------------------------------|-----------------------|
 login                      |/api/v1/auth/login                                        |       POST            |
 |                          |                                                          |
 post question              |/api/v1/questions                                         |       POST            |
