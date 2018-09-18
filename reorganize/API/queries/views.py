@@ -5,7 +5,7 @@ from flask import request
 from functools import wraps
 from flask_restful import Api
 from flask_restful import Resource
-from flask_cors import CORS
+#from flask_cors import CORS
 import psycopg2
 import jwt
 import datetime
@@ -51,7 +51,11 @@ class PostQuestion(Resource):
         user_id = data['user_id']
 
         if not question:
-            return{"message": "post a question"}
+            return{"message": "question cannot be blank"}, 400
+        if not title:
+            return {"message": "title cannot be blank"}, 400
+        if title.isdigit():
+            return {"message": "title cannot be a number"}, 400
                 
         try:
             Questions.check_question(question)
@@ -81,7 +85,7 @@ class GetQuestion(Resource):
                     Questions.get_question(question_id)
                     result = cursor.fetchone()
                     if result is None:
-                        return {"message": "question_id does not exist"}, 404
+                        return {"message": "question does not exist"}, 404
                     else:
                         user_id = result[4]
                         title = result[1]
@@ -108,11 +112,11 @@ class PostAnswer(Resource):
         user_id = data['user_id']
         answer = request.get_json()['answer']
         if not answer:
-            return {"message": "post an answer"}
+            return {"message": "answer cannot be blank"}, 400
         try:         
                 Questions.get_question(question_id)
                 if cursor.fetchone() is None:
-                    return {"message": "question does not exist"}, 404
+                    return {"message": "you are trying to post an answer to a question that does not exist"}, 404
                 else:
                     Questions.post_answer(answer, user_id, question_id)
         except:
