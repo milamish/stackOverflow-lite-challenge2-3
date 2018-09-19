@@ -9,12 +9,12 @@ install:
   - pip install pytest-cov
   - pip install coveralls
 before_script:
-  - cd app/tests
+  - cd reorganize/API/tests
   - psql -c 'create database stack;' -U postgres
   - psql -c "CREATE USER foo WITH PASSWORD 'bar';" -U postgres
 script:
   - pytest
-  #- pytest --cov-report term-missing --cov=.
+  - pytest --cov-report term-missing --cov=.
   - pytest --cov=.
   
 
