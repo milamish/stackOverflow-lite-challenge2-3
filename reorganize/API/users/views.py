@@ -7,6 +7,7 @@ import psycopg2
 from flask import Blueprint
 from flask import request
 from flask_restful import Resource
+from flask_cors import CORS
 
 from API import app, api
 from API.models import *
@@ -26,7 +27,7 @@ def check_pwhash(password, hash):
         return True
     return False
 
-#this class allows a user to create an account by signing up
+# this class allows a user to create an account by signing up
 
 
 class Register(Resource):
@@ -45,6 +46,8 @@ class Register(Resource):
             return{"message": "you must provide a name"}
         if not username:
             return{"message": "you must provide a username"}
+        if fname.isdigit() or lname.isdigit():
+            return {"message": "name cannot be a digit"}, 400
         if len(username) < 5 or len(username) > 22:
             return{"message": "username must be between 5 and 22 characters"}
         if not password:
@@ -73,7 +76,7 @@ class Register(Resource):
         except:
             return{"message": "unable to register!"}, 500
         connection.commit()
-        return{"fname": fname, "lname": lname, "emailaddress": emailaddress, "username": username}
+        return{"message": "succesfully registered", "fname": fname, "lname": lname, "emailaddress": emailaddress, "username": username}
         
 #this class allows a user with an account to login
 
@@ -92,7 +95,7 @@ class Login(Resource):
         RegisterUser.check_username(username)
         result = cursor.fetchone()
         if result is None:
-            return{"message": "your username is wrong"}, 400
+            return{"message": "invalid username"}, 400
         else:
             if check_pwhash(password, result[5]):
                 token = jwt.encode({'username': username, 'user_id': result[0], 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60)}, app.config['SECRET_KEY'])

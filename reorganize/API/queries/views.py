@@ -5,6 +5,7 @@ from flask import request
 from functools import wraps
 from flask_restful import Api
 from flask_restful import Resource
+from flask_cors import CORS
 import psycopg2
 import jwt
 import datetime
@@ -23,11 +24,11 @@ def tokens(k):
         """decorators for pursing token to different functions"""
         token = request.headers.get('x-access-token')
         if not token:
-            return jsonify({'message': 'Token is missing'})
+            return{'message': 'Token is missing'}, 403
         try:
             data = jwt.decode(token, app.config['SECRET_KEY'])
         except:
-            return jsonify({'message': 'Token is invalid'})
+            return{'message': 'Token is invalid'}, 403
         return k(*args, **kwargs)
     return decorators
 
@@ -50,7 +51,11 @@ class PostQuestion(Resource):
         user_id = data['user_id']
 
         if not question:
-            return{"message": "post a question"}
+            return{"message": "question cannot be blank"}, 400
+        if not title:
+            return {"message": "title cannot be blank"}, 400
+        if title.isdigit():
+            return {"message": "title cannot be a number"}, 400
                 
         try:
             Questions.check_question(question)
@@ -60,9 +65,9 @@ class PostQuestion(Resource):
         except:
             return{"message": "unable to post a question"}, 500
         connection.commit()
-        return {"title": title, "question": question, "user_id": user_id}, 200
+        return {"title": title, "question": question, "user_id": user_id}, 201
 
-#this class allows users to get a single question using the question ID
+# this class allows users to get a single question using the question ID
 
 
 class GetQuestion(Resource):
@@ -80,7 +85,7 @@ class GetQuestion(Resource):
                     Questions.get_question(question_id)
                     result = cursor.fetchone()
                     if result is None:
-                        return {"message": "question_id does not exist"}, 404
+                        return {"message": "question does not exist"}, 404
                     else:
                         user_id = result[4]
                         title = result[1]
@@ -107,17 +112,17 @@ class PostAnswer(Resource):
         user_id = data['user_id']
         answer = request.get_json()['answer']
         if not answer:
-            return {"message": "post an answer"}
+            return {"message": "answer cannot be blank"}, 400
         try:         
                 Questions.get_question(question_id)
                 if cursor.fetchone() is None:
-                    return {"message": "question does not exist"}, 404
+                    return {"message": "you are trying to post an answer to a question that does not exist"}, 404
                 else:
                     Questions.post_answer(answer, user_id, question_id)
         except:
             return{"message": "the question does not exist"}, 500
         connection.commit()
-        return {"question_id": question_id, "answer": answer, "user_id": user_id}, 200
+        return {"question_id": question_id, "answer": answer, "user_id": user_id}, 201
 
 #this class allows a user to retrieve all answers to a specific question using the question ID
 
@@ -199,16 +204,24 @@ class Modify(Resource):
         data = jwt.decode(request.headers.get('x-access-token'), app.config['SECRET_KEY'])
         user_id = data['user_id']
         answer = request.get_json()['answer'].strip()
+        accept_answer = request.get_json()['accept_answer']
         Questions.get_user_id_and_answer_id(answer_id, question_id, user_id)
         result = cursor.fetchone()
         if result is not None:
             Questions.modify_answer(question_id, answer, answer_id)
+            connection.commit()
+            return{"answer": answer, "question_id": question_id, "answer_id": answer_id, "accept_answer": accept_answer}, 201
+        Questions.get_user_id_and_question_id(question_id, user_id)
+        result = cursor.fetchone
+        if result is not None:
+            Questions.mark_answer(question_id, accept_answer)
+            connection.commit()
+            return {"answer": answer, "accept_answer": accept_answer}, 201
         else:
-            return {"message": "entry does not exist"}, 404
+            return {"message": "entry not found"}, 404
         connection.commit()
-        return{"answer": answer, "question_id": question_id, "answer_id": answer_id}, 201
-
-#this class allows authors of questions to delete their own questions
+               
+# this class allows authors of questions to delete their own questions
 
 
 class Remove(Resource):

@@ -21,9 +21,10 @@ def table():
             user_id INT)")
         cursor.execute("CREATE TABLE IF NOT EXISTS answers(answer_id serial PRIMARY KEY, \
             answer VARCHAR(100) NOT NULL, \
-            question_id INT REFERENCES questions(question_id) ON DELETE CASCADE ,\
+            question_id INT REFERENCES questions(question_id) ON DELETE CASCADE,\
             answer_date timestamp DEFAULT CURRENT_TIMESTAMP,\
-            user_id INT)")
+            user_id INT,\
+            accept_answer BOOLEAN NOT NULL DEFAULT f)")
     connection.commit()
 
 
@@ -85,3 +86,7 @@ class Questions():
 
     def get_questions_by_title(title):
         cursor.execute("SELECT * FROM  questions WHERE title = %s;", (title,))
+
+    def mark_answer(question_id, accept_answer):
+        cursor.execute("update answers SET accept_answer = '"+accept_answer+"' WHERE question_id = '"+str(question_id)+"';",\
+         ((question_id, accept_answer),))
