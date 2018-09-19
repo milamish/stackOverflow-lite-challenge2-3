@@ -26,7 +26,7 @@ class Test_Users(unittest.TestCase):
         res = app.test_client().post('/api/v1/auth/login', data=noneuser, headers=header )
         result = json.loads(res.data.decode())
         self.assertEqual(res.status_code, 400)
-        self.assertEqual(result['message'], "your username is wrong")
+        self.assertEqual(result['message'], "invalid username")
 
     def test_signedup(self):
         sign_data = json.dumps({"username": "sharlyne2454", "password": "Milamish8", "emailaddress": "shal5@yahoo.com",
