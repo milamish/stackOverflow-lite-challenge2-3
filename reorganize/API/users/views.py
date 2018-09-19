@@ -7,7 +7,7 @@ import psycopg2
 from flask import Blueprint
 from flask import request
 from flask_restful import Resource
-from flask_cors import CORS
+#from flask_cors import CORS
 
 from API import app, api
 from API.models import *

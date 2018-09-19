@@ -5,7 +5,7 @@ from flask import request
 from functools import wraps
 from flask_restful import Api
 from flask_restful import Resource
-from flask_cors import CORS
+#from flask_cors import CORS
 import psycopg2
 import jwt
 import datetime
